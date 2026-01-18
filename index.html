@@ -272,13 +272,14 @@
            height: 100%;
            padding-top: 10px;
            background: transparent;
+           isolation: isolate; /* 创建新层叠上下文 */
        }
 
-       /* 主要图片 - 宽度设为页面75%，增大圆角更圆滑 */
+       /* 主要图片 - 移除#333333背景色，防止闪烁 */
        .content-image {
            width: 75%;
            aspect-ratio: 1;
-           background: #333333 url('Mist.png') center/cover no-repeat;
+           background: url('Mist.png') center/cover no-repeat; /* 已移除#333333 */
            margin-bottom: 25px;
            border-radius: 50px;
            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
@@ -286,6 +287,11 @@
            flex-shrink: 0;
            overflow: hidden;
            max-width: 400px;
+           /* 防止闪烁的硬件加速 */
+           transform: translateZ(0);
+           -webkit-transform: translateZ(0);
+           backface-visibility: hidden;
+           -webkit-backface-visibility: hidden;
        }
 
        /* 文本轮换区域 */
