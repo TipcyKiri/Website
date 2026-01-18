@@ -5,10 +5,10 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
    <meta name="apple-mobile-web-app-capable" content="yes">
    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-   <meta name="description" content="MagicMist">
+   <meta name="description" content="Misty Imagination">
    <link rel="icon" type="image/x-icon" href="favicon.ico">
    <link rel="apple-touch-icon" href="Mist.png">
-   <title>MagicMist</title>
+   <title>Misty Imagination</title>
    <style>
        * {
            margin: 0;
@@ -634,7 +634,7 @@
    <div id="content-container">
        <div class="main-content">
            <div class="content-layer">
-               <div class="content-image" role="img" aria-label="MagicMist应用图标"></div>
+               <div class="content-image" role="img" aria-label="Misty Imagination Logo"></div>
                <div class="text-rotator-container">
                    <div class="text-rotator" id="textRotator">
                        <!-- 文本将通过JavaScript动态添加 -->
@@ -657,23 +657,23 @@
    <div class="modal-overlay" id="modalOverlay">
        <div class="modal-content">
            <div class="modal-header">
-               <h2 class="modal-title">自定义内容</h2>
+               <h2 class="modal-title">Settings</h2>
                <button class="modal-close" id="modalClose">&times;</button>
            </div>
            
            <div class="modal-section">
-               <h3 class="section-title">更换图片</h3>
+               <h3 class="section-title">Change Picture</h3>
                <div class="image-preview-container">
                    <div class="image-preview" id="imagePreview"></div>
                    <div class="file-input-wrapper">
-                       <div class="file-input-button">选择图片</div>
+                       <div class="file-input-button">Select Picture</div>
                        <input type="file" class="file-input" id="imageInput" accept="image/*">
                    </div>
                </div>
            </div>
            
            <div class="modal-section">
-               <h3 class="section-title">修改轮换文本</h3>
+               <h3 class="section-title">Change Texts</h3>
                <div class="text-input-container">
                    <input type="text" class="text-input" id="textInput1" placeholder="文本 1" maxlength="20">
                    <input type="text" class="text-input" id="textInput2" placeholder="文本 2" maxlength="20">
@@ -681,8 +681,8 @@
            </div>
            
            <div class="modal-buttons">
-               <button class="modal-button save" id="saveButton">保存</button>
-               <button class="modal-button cancel" id="cancelButton">取消</button>
+               <button class="modal-button save" id="saveButton">Save</button>
+               <button class="modal-button cancel" id="cancelButton">Channel</button>
            </div>
        </div>
    </div>
@@ -691,16 +691,16 @@
        // 应用配置
        const CONFIG = {
            webauthn: {
-               rpName: "MagicMist",
-               userName: "霧@MagicMist",
-               userDisplayName: "霧@MagicMist'",
+               rpName: "Misty Imagination",
+               userName: "Misty Imagination",
+               userDisplayName: "霧@Misty Imagination'",
                timeout: 60000
            },
            
            textRotation: {
                texts: [
                    "霧",
-                   "Mist"
+                   "Misty Imagination"
                ],
                interval: 1200,
                transitionDuration: 400
@@ -867,7 +867,7 @@
            saveChanges: function() {
                const newTexts = [
                    DOM.textInput1.value || "霧",
-                   DOM.textInput2.value || "Mist"
+                   DOM.textInput2.value || "Misty Imagination"
                ];
                
                TextRotator.updateTexts(newTexts);
@@ -906,9 +906,9 @@
            
            saveContent: function() {
                try {
-                   localStorage.setItem('magicMist_customTexts', JSON.stringify(AppState.customTexts));
+                   localStorage.setItem('Mist_customTexts', JSON.stringify(AppState.customTexts));
                    if (AppState.customImage) {
-                       localStorage.setItem('magicMist_customImage', AppState.customImage);
+                       localStorage.setItem('Mist_customImage', AppState.customImage);
                    }
                } catch (e) {
                    console.error("保存内容失败:", e);
@@ -917,12 +917,12 @@
            
            loadSavedContent: function() {
                try {
-                   const savedTexts = localStorage.getItem('magicMist_customTexts');
+                   const savedTexts = localStorage.getItem('Mist_customTexts');
                    if (savedTexts) {
                        AppState.customTexts = JSON.parse(savedTexts);
                    }
                    
-                   const savedImage = localStorage.getItem('magicMist_customImage');
+                   const savedImage = localStorage.getItem('Mist_customImage');
                    if (savedImage) {
                        AppState.customImage = savedImage;
                        this.updateImages();
