@@ -10,6 +10,7 @@
     <link rel="apple-touch-icon" href="Mist.png">
     <title>MagicMist</title>
     <style>
+        /* 所有原有样式保持不变 */
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +32,6 @@
             touch-action: none;
         }
 
-        /* 安全区域变量定义 */
         :root {
             --safe-area-inset-top: env(safe-area-inset-top, 0px);
             --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
@@ -39,7 +39,6 @@
             --safe-area-inset-right: env(safe-area-inset-right, 0px);
         }
 
-        /* 认证界面 */
         #auth-container {
             position: fixed;
             top: 0;
@@ -67,7 +66,6 @@
             padding: 20px;
         }
 
-        /* 纯文本按钮样式 - 宽度75% */
         .auth-button {
             background: none;
             color: #FFFFFF;
@@ -102,7 +100,6 @@
             opacity: 0;
         }
 
-        /* 加载动画 */
         .auth-button-loading::after {
             content: "";
             position: absolute;
@@ -123,7 +120,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* 按钮文本容器 */
         .button-text-container {
             display: flex;
             flex-direction: column;
@@ -132,7 +128,6 @@
             width: 100%;
         }
 
-        /* MISTY主文本 */
         .button-main-text {
             font-size: 1em;
             margin-bottom: 2px;
@@ -140,7 +135,6 @@
             text-align: center;
         }
 
-        /* IMAGINATION副文本 */
         .button-sub-text {
             font-size: 0.35em;
             letter-spacing: 3px;
@@ -149,7 +143,6 @@
             text-align: center;
         }
 
-        /* 主内容区域 */
         #content-container {
             display: none;
             position: fixed;
@@ -169,7 +162,6 @@
             display: block;
         }
 
-        /* 模糊背景层 */
         .blur-background {
             position: fixed;
             top: 0;
@@ -186,7 +178,6 @@
             -webkit-transform: scale(1.2);
         }
 
-        /* 渐变遮罩层 */
         .gradient-mask {
             position: fixed;
             top: 0;
@@ -209,7 +200,6 @@
                 );
         }
 
-        /* 安全区域渐变层 */
         .safe-area-gradient {
             position: fixed;
             top: 0;
@@ -239,7 +229,6 @@
                 );
         }
 
-        /* 主内容布局 */
         .main-content {
             position: absolute;
             top: 50%;
@@ -260,7 +249,6 @@
             z-index: 4;
         }
 
-        /* 内容层 */
         .content-layer {
             position: relative;
             z-index: 2;
@@ -274,7 +262,6 @@
             background: transparent;
         }
 
-        /* 主要图片 - 宽度设为页面75%，增大圆角更圆滑 */
         .content-image {
             width: 75%;
             aspect-ratio: 1;
@@ -288,7 +275,6 @@
             max-width: 400px;
         }
 
-        /* 文本轮换区域 */
         .text-rotator-container {
             width: 100%;
             margin-top: 5px;
@@ -349,7 +335,6 @@
             transform: translateY(-20px);
         }
 
-        /* 模态窗口 */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -477,6 +462,54 @@
             cursor: pointer;
         }
 
+        /* 新增剪贴板相关样式 */
+        .clipboard-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .clipboard-button {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            font-family: Impact;
+            border: none;
+            width: 100%;
+        }
+
+        .clipboard-button:hover {
+            background-color: #0b7dda;
+        }
+
+        .auto-update-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .auto-update-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .auto-update-label {
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+
         .text-input-container {
             display: flex;
             flex-direction: column;
@@ -534,7 +567,6 @@
             background-color: #666666;
         }
 
-        /* 响应式设计 */
         @media (max-width: 768px) {
             .content-image {
                 width: 75%;
@@ -595,12 +627,10 @@
             }
         }
         
-        /* 防止滚动 */
         .no-scroll {
             overflow: hidden;
         }
         
-        /* 为不支持env()的浏览器提供回退 */
         @supports not (top: env(safe-area-inset-top)) {
             :root {
                 --safe-area-inset-top: constant(safe-area-inset-top, 0px);
@@ -663,6 +693,15 @@
                         <div class="file-input-button">选择图片</div>
                         <input type="file" class="file-input" id="imageInput" accept="image/*">
                     </div>
+                    
+                    <!-- 新增剪贴板控制区域 -->
+                    <div class="clipboard-controls">
+                        <button class="clipboard-button" id="clipboardButton">从剪贴板粘贴图片</button>
+                        <div class="auto-update-control">
+                            <input type="checkbox" class="auto-update-checkbox" id="autoUpdateCheckbox">
+                            <label class="auto-update-label" for="autoUpdateCheckbox">每秒自动从剪贴板更新图片</label>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -671,8 +710,6 @@
                 <div class="text-input-container">
                     <input type="text" class="text-input" id="textInput1" placeholder="文本 1" maxlength="20">
                     <input type="text" class="text-input" id="textInput2" placeholder="文本 2" maxlength="20">
-                    <input type="text" class="text-input" id="textInput3" placeholder="文本 3" maxlength="20">
-                    <input type="text" class="text-input" id="textInput4" placeholder="文本 4" maxlength="20">
                 </div>
             </div>
             
@@ -696,9 +733,7 @@
             textRotation: {
                 texts: [
                     "霧",
-                    "雾", 
-                    "Mist",
-                    "Tipcy"
+                    "Mist"
                 ],
                 interval: 1200,
                 transitionDuration: 400
@@ -710,7 +745,9 @@
             isAuthenticated: false,
             credentialId: null,
             customImage: null,
-            customTexts: [...CONFIG.textRotation.texts]
+            customTexts: [...CONFIG.textRotation.texts],
+            autoUpdateEnabled: false,
+            autoUpdateIntervalId: null
         };
         
         // DOM元素引用
@@ -725,13 +762,13 @@
             imagePreview: document.getElementById('imagePreview'),
             textInput1: document.getElementById('textInput1'),
             textInput2: document.getElementById('textInput2'),
-            textInput3: document.getElementById('textInput3'),
-            textInput4: document.getElementById('textInput4'),
             saveButton: document.getElementById('saveButton'),
             cancelButton: document.getElementById('cancelButton'),
             blurBackground: document.querySelector('.blur-background'),
             gradientMask: document.querySelector('.gradient-mask'),
-            safeAreaGradient: document.querySelector('.safe-area-gradient')
+            safeAreaGradient: document.querySelector('.safe-area-gradient'),
+            clipboardButton: document.getElementById('clipboardButton'),
+            autoUpdateCheckbox: document.getElementById('autoUpdateCheckbox')
         };
         
         // 文本轮换管理器
@@ -817,12 +854,16 @@
         
         // 模态窗口管理器
         const ModalManager = {
+            autoUpdateInterval: null,
+            
             init: function() {
                 DOM.textRotator.addEventListener('click', () => this.showModal());
                 DOM.modalClose.addEventListener('click', () => this.hideModal());
                 DOM.cancelButton.addEventListener('click', () => this.hideModal());
                 DOM.saveButton.addEventListener('click', () => this.saveChanges());
                 DOM.imageInput.addEventListener('change', (e) => this.handleImageUpload(e));
+                DOM.clipboardButton.addEventListener('click', () => this.handleClipboardImage());
+                DOM.autoUpdateCheckbox.addEventListener('change', (e) => this.toggleAutoUpdate(e.target.checked));
                 
                 DOM.modalOverlay.addEventListener('click', (e) => {
                     if (e.target === DOM.modalOverlay) {
@@ -836,8 +877,6 @@
             showModal: function() {
                 DOM.textInput1.value = AppState.customTexts[0] || '';
                 DOM.textInput2.value = AppState.customTexts[1] || '';
-                DOM.textInput3.value = AppState.customTexts[2] || '';
-                DOM.textInput4.value = AppState.customTexts[3] || '';
                 
                 if (AppState.customImage) {
                     DOM.imagePreview.style.backgroundImage = `url(${AppState.customImage})`;
@@ -845,13 +884,21 @@
                     DOM.imagePreview.style.backgroundImage = "url('Mist.png')";
                 }
                 
+                DOM.autoUpdateCheckbox.checked = AppState.autoUpdateEnabled;
+                
                 DOM.modalOverlay.classList.add('active');
                 document.body.classList.add('no-scroll');
+                
+                // 开始自动更新（如果启用）
+                if (AppState.autoUpdateEnabled) {
+                    this.startAutoUpdate();
+                }
             },
             
             hideModal: function() {
                 DOM.modalOverlay.classList.remove('active');
                 document.body.classList.remove('no-scroll');
+                this.stopAutoUpdate();
             },
             
             handleImageUpload: function(event) {
@@ -866,12 +913,80 @@
                 }
             },
             
+            handleClipboardImage: async function() {
+                try {
+                    // 请求剪贴板权限
+                    const permission = await navigator.permissions.query({ name: 'clipboard-read' });
+                    
+                    if (permission.state === 'denied') {
+                        alert('请允许剪贴板访问权限以使用此功能');
+                        return;
+                    }
+                    
+                    const clipboardItems = await navigator.clipboard.read();
+                    
+                    for (const item of clipboardItems) {
+                        const imageTypes = item.types.filter(type => type.startsWith('image/'));
+                        
+                        if (imageTypes.length > 0) {
+                            const blob = await item.getType(imageTypes[0]);
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(e) {
+                                const imageUrl = e.target.result;
+                                DOM.imagePreview.style.backgroundImage = `url(${imageUrl})`;
+                                AppState.tempImage = imageUrl;
+                            };
+                            
+                            reader.readAsDataURL(blob);
+                            return;
+                        }
+                    }
+                    
+                    alert('剪贴板中没有找到图片');
+                } catch (error) {
+                    console.error('读取剪贴板失败:', error);
+                    alert('无法读取剪贴板，请确保已授予权限并使用HTTPS环境');
+                }
+            },
+            
+            toggleAutoUpdate: function(enabled) {
+                AppState.autoUpdateEnabled = enabled;
+                
+                if (enabled) {
+                    this.startAutoUpdate();
+                } else {
+                    this.stopAutoUpdate();
+                }
+                
+                try {
+                    localStorage.setItem('magicMist_autoUpdate', enabled.toString());
+                } catch (e) {
+                    console.error("保存自动更新设置失败:", e);
+                }
+            },
+            
+            startAutoUpdate: function() {
+                if (this.autoUpdateInterval) {
+                    clearInterval(this.autoUpdateInterval);
+                }
+                
+                this.autoUpdateInterval = setInterval(() => {
+                    this.handleClipboardImage();
+                }, 1000);
+            },
+            
+            stopAutoUpdate: function() {
+                if (this.autoUpdateInterval) {
+                    clearInterval(this.autoUpdateInterval);
+                    this.autoUpdateInterval = null;
+                }
+            },
+            
             saveChanges: function() {
                 const newTexts = [
                     DOM.textInput1.value || "霧",
-                    DOM.textInput2.value || "雾",
-                    DOM.textInput3.value || "Mist",
-                    DOM.textInput4.value || "Tipcy"
+                    DOM.textInput2.value || "Mist"
                 ];
                 
                 TextRotator.updateTexts(newTexts);
@@ -911,6 +1026,7 @@
             saveContent: function() {
                 try {
                     localStorage.setItem('magicMist_customTexts', JSON.stringify(AppState.customTexts));
+                    localStorage.setItem('magicMist_autoUpdate', AppState.autoUpdateEnabled.toString());
                     if (AppState.customImage) {
                         localStorage.setItem('magicMist_customImage', AppState.customImage);
                     }
@@ -924,6 +1040,11 @@
                     const savedTexts = localStorage.getItem('magicMist_customTexts');
                     if (savedTexts) {
                         AppState.customTexts = JSON.parse(savedTexts);
+                    }
+                    
+                    const savedAutoUpdate = localStorage.getItem('magicMist_autoUpdate');
+                    if (savedAutoUpdate !== null) {
+                        AppState.autoUpdateEnabled = savedAutoUpdate === 'true';
                     }
                     
                     const savedImage = localStorage.getItem('magicMist_customImage');
