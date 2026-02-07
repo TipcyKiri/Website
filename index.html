@@ -1,4 +1,4 @@
-.<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,6 @@
     <meta name="description" content="Misty Imagination">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="Mist.png">
-    <!-- iOS Web Clip 启动画面 -->
     <link rel="apple-touch-startup-image" href="Mist.png">
     <title>Misty Imagination</title>
     <style>
@@ -43,7 +42,6 @@
             font-weight: 700;
             position: relative;
             touch-action: none;
-            /* iOS Web Clip 优化 */
             position: fixed;
             top: 0;
             left: 0;
@@ -51,7 +49,6 @@
             bottom: 0;
         }
 
-        /* 安全区域变量定义 */
         :root {
             --safe-area-inset-top: env(safe-area-inset-top, 0px);
             --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
@@ -59,7 +56,6 @@
             --safe-area-inset-right: env(safe-area-inset-right, 0px);
         }
 
-        /* 认证界面 - 优化居中 */
         #auth-container {
             position: fixed;
             top: 0;
@@ -167,7 +163,6 @@
             text-align: center;
         }
 
-        /* 主内容区域 - 优化居中 */
         #content-container {
             display: none;
             position: fixed;
@@ -192,7 +187,6 @@
             display: block;
         }
 
-        /* 模糊背景层 */
         .blur-background {
             position: fixed;
             top: 0;
@@ -209,7 +203,6 @@
             -webkit-transform: scale(1.2);
         }
 
-        /* 渐变遮罩层 */
         .gradient-mask {
             position: fixed;
             top: 0;
@@ -232,7 +225,6 @@
                 );
         }
 
-        /* 安全区域渐变层 - 优化 */
         .safe-area-gradient {
             position: fixed;
             top: 0;
@@ -262,7 +254,6 @@
                 );
         }
 
-        /* 主内容布局 - 优化居中 */
         .main-content {
             position: absolute;
             top: 50%;
@@ -284,7 +275,6 @@
             box-sizing: border-box;
         }
 
-        /* 内容层 - 优化 */
         .content-layer {
             position: relative;
             z-index: 2;
@@ -299,25 +289,37 @@
             gap: 15px;
         }
 
-        /* 主要图片 - 优化 */
-        .content-image {
+        /* 增强立体效果 - 3D容器 */
+        .image-3d-container {
             width: 92%;
             aspect-ratio: 1;
-            border-radius: 50px;
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.3),
-                0 10px 20px rgba(0, 0, 0, 0.18), 
-                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-            transform: translateZ(0) rotateY(0.3deg);
-            background: url('Mist.png') center/cover no-repeat;
+            perspective: 1000px;
             position: relative;
             flex-shrink: 0;
-            overflow: hidden;
             max-width: 580px;
-            transition: transform 0.2s ease;
+            transform-style: preserve-3d;
         }
 
-        /* 精致光泽 */
+        /* 主图片 - 增强立体效果 */
+        .content-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50px;
+            box-shadow: 
+                0 35px 70px rgba(0, 0, 0, 0.4),
+                0 15px 30px rgba(0, 0, 0, 0.25),
+                0 5px 10px rgba(0, 0, 0, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1);
+            transform: translateZ(0) rotateX(5deg) rotateY(-3deg);
+            background: url('Mist.png') center/cover no-repeat;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        /* 多层光泽增强立体感 */
         .content-image::before {
             content: "";
             position: absolute;
@@ -327,42 +329,96 @@
             bottom: 0;
             background: linear-gradient(
                 135deg,
-                rgba(255, 255, 255, 0.04) 0%,
-                transparent 40%,
-                transparent 60%,
-                rgba(0, 0, 0, 0.06) 100%
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(255, 255, 255, 0.05) 25%,
+                transparent 50%,
+                transparent 75%,
+                rgba(0, 0, 0, 0.1) 100%
             );
             border-radius: 50px;
             pointer-events: none;
             z-index: 1;
         }
 
-        /* 环境景深 */
+        /* 顶部高光条 */
         .content-image::after {
             content: "";
             position: absolute;
-            top: -12%;
-            left: -12%;
-            right: -12%;
-            bottom: -12%;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                transparent 100%
+            );
+            border-radius: 1px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* 3D深度层 - 模拟厚度 */
+        .image-depth-layer {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            background: inherit;
+            background-size: cover;
+            background-position: center;
+            border-radius: 45px;
+            transform: translateZ(-20px);
+            filter: brightness(0.6) blur(2px);
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        /* 悬浮阴影层 */
+        .image-float-shadow {
+            position: absolute;
+            top: 15%;
+            left: 5%;
+            right: 5%;
+            bottom: -10%;
             background: radial-gradient(
                 ellipse at center,
-                transparent 65%,
-                rgba(0, 0, 0, 0.1) 100%
+                rgba(0, 0, 0, 0.4) 0%,
+                rgba(0, 0, 0, 0.2) 40%,
+                transparent 70%
             );
-            border-radius: 60px;
-            filter: blur(25px);
-            transform: scale(0.88);
+            filter: blur(30px);
+            transform: translateZ(-40px);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* 边缘反光 */
+        .image-rim-light {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.3) 0%,
+                transparent 30%,
+                transparent 70%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            border-radius: 52px;
             z-index: -1;
             pointer-events: none;
         }
 
-        /* 点击反馈 */
+        /* 点击反馈保持3D感 */
         .content-image:active {
-            transform: translateZ(0) rotateY(0.3deg) scale(0.96);
+            transform: translateZ(0) rotateX(5deg) rotateY(-3deg) scale(0.96) translateZ(-10px);
         }
 
-        /* 文本和控制容器 */
         .text-control-container {
             width: 92%;
             max-width: 580px;
@@ -371,7 +427,6 @@
             gap: 12px;
         }
 
-        /* 文本内容容器 */
         .text-content {
             flex: 1;
             text-align: left;
@@ -381,7 +436,6 @@
             justify-content: center;
         }
 
-        /* 控制按钮"S" - 无背景 */
         .text-edit-trigger {
             font-family: Impact;
             font-weight: 700;
@@ -403,35 +457,28 @@
             transform: scale(0.92);
         }
 
-        /* 文本行样式 - 优化透明度和混合效果 */
         .text-line {
             font-family: Impact;
             font-weight: 700;
             width: 100%;
             line-height: 1.1;
-            /* 优化：使用更鲜明的混合模式 */
             mix-blend-mode: overlay;
-            /* 优化：添加微妙阴影增强可读性 */
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
         }
 
         .text-line:first-child {
-            /* 主文字：更高不透明度确保可读性 */
             color: rgba(255, 255, 255, 0.85);
             font-size: 26px;
             margin-bottom: 6px;
-            /* 主文字阴影稍强 */
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .text-line:last-child {
-            /* 副文字：稍低不透明度保持融入感 */
             color: rgba(255, 255, 255, 0.7);
             font-size: 22px;
             opacity: 0.9;
         }
 
-        /* 模态窗口 */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -559,7 +606,6 @@
             cursor: pointer;
         }
 
-        /* 文本输入样式 */
         .text-input-container {
             display: flex;
             flex-direction: column;
@@ -623,17 +669,29 @@
             background-color: #666666;
         }
 
-        /* iOS Web Clip 专用优化 - 增强版 */
         @media (max-width: 768px) {
-            .content-image {
+            .image-3d-container {
                 width: 90%;
-                border-radius: 40px;
                 max-width: 450px;
+            }
+            
+            .content-image {
+                border-radius: 40px;
                 box-shadow: 
-                    0 22px 44px rgba(0, 0, 0, 0.25),
-                    0 9px 18px rgba(0, 0, 0, 0.15),
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-                transform: translateZ(0) rotateY(0.3deg);
+                    0 30px 60px rgba(0, 0, 0, 0.35),
+                    0 12px 24px rgba(0, 0, 0, 0.2),
+                    0 4px 8px rgba(0, 0, 0, 0.12),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+                transform: translateZ(0) rotateX(5deg) rotateY(-3deg);
+            }
+            
+            .image-depth-layer {
+                border-radius: 35px;
+            }
+            
+            .image-rim-light {
+                border-radius: 42px;
             }
             
             .text-control-container {
@@ -658,15 +716,28 @@
         }
 
         @media (max-width: 430px) {
-            .content-image {
+            .image-3d-container {
                 width: 92%;
-                border-radius: 35px;
                 max-width: 395px;
+            }
+            
+            .content-image {
+                border-radius: 35px;
                 box-shadow: 
-                    0 20px 40px rgba(0, 0, 0, 0.23),
-                    0 8px 16px rgba(0, 0, 0, 0.13),
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-                transform: translateZ(0) rotateY(0.3deg);
+                    0 25px 50px rgba(0, 0, 0, 0.32),
+                    0 10px 20px rgba(0, 0, 0, 0.18),
+                    0 3px 6px rgba(0, 0, 0, 0.1),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+                transform: translateZ(0) rotateX(5deg) rotateY(-3deg);
+            }
+            
+            .image-depth-layer {
+                border-radius: 30px;
+            }
+            
+            .image-rim-light {
+                border-radius: 37px;
             }
             
             .text-control-container {
@@ -691,15 +762,28 @@
         }
 
         @media (max-width: 390px) {
-            .content-image {
+            .image-3d-container {
                 width: 90%;
-                border-radius: 32px;
                 max-width: 351px;
+            }
+            
+            .content-image {
+                border-radius: 32px;
                 box-shadow: 
-                    0 18px 36px rgba(0, 0, 0, 0.21),
-                    0 7px 14px rgba(0, 0, 0, 0.12),
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-                transform: translateZ(0) rotateY(0.3deg);
+                    0 22px 44px rgba(0, 0, 0, 0.3),
+                    0 9px 18px rgba(0, 0, 0, 0.16),
+                    0 3px 6px rgba(0, 0, 0, 0.09),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+                transform: translateZ(0) rotateX(5deg) rotateY(-3deg);
+            }
+            
+            .image-depth-layer {
+                border-radius: 27px;
+            }
+            
+            .image-rim-light {
+                border-radius: 34px;
             }
             
             .text-control-container {
@@ -723,7 +807,6 @@
             }
         }
 
-        /* iOS Web Clip 特定优化 */
         @supports (-webkit-touch-callout: none) {
             html, body {
                 min-height: -webkit-fill-available;
@@ -738,15 +821,25 @@
             }
         }
 
-        /* iPhone SE 等小屏幕优化 */
         @media (max-width: 375px) and (max-height: 667px) {
             .main-content {
                 padding: 15px 20px;
             }
             
+            .image-3d-container {
+                max-width: 300px;
+            }
+            
             .content-image {
                 border-radius: 28px;
-                max-width: 300px;
+            }
+            
+            .image-depth-layer {
+                border-radius: 23px;
+            }
+            
+            .image-rim-light {
+                border-radius: 30px;
             }
             
             .text-line:first-child {
@@ -763,12 +856,10 @@
             }
         }
 
-        /* 防止滚动 */
         .no-scroll {
             overflow: hidden;
         }
         
-        /* 为不支持env()的浏览器提供回退 */
         @supports not (top: env(safe-area-inset-top)) {
             :root {
                 --safe-area-inset-top: constant(safe-area-inset-top, 0px);
@@ -781,7 +872,6 @@
     </style>
 </head>
 <body class="no-scroll">
-    <!-- Face ID认证界面 -->
     <div id="auth-container">
         <div class="auth-button-container">
             <button class="auth-button" id="authButton">
@@ -793,11 +883,17 @@
         </div>
     </div>
 
-    <!-- 主内容区域 -->
     <div id="content-container">
         <div class="main-content">
             <div class="content-layer">
-                <div class="content-image" role="img" aria-label="Misty Imagination Logo"></div>
+                <!-- 3D立体图片容器 -->
+                <div class="image-3d-container">
+                    <div class="image-float-shadow"></div>
+                    <div class="image-rim-light"></div>
+                    <div class="content-image" role="img" aria-label="Misty Imagination Logo">
+                        <div class="image-depth-layer"></div>
+                    </div>
+                </div>
                 <div class="text-control-container">
                     <div class="text-content">
                         <div class="text-line">霧</div>
@@ -809,16 +905,10 @@
         </div>
     </div>
 
-    <!-- 模糊背景层 -->
     <div class="blur-background"></div>
-    
-    <!-- 渐变遮罩层 -->
     <div class="gradient-mask"></div>
-    
-    <!-- 安全区域渐变层 -->
     <div class="safe-area-gradient"></div>
 
-    <!-- 模态窗口 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <div class="modal-header">
@@ -853,7 +943,6 @@
     </div>
 
     <script>
-        // 应用配置
         const CONFIG = {
             webauthn: {
                 rpName: "Misty Imagination",
@@ -861,14 +950,12 @@
                 userDisplayName: "霧@Misty Imagination'",
                 timeout: 60000
             },
-            
             defaultTexts: {
                 line1: "霧",
                 line2: "Misty Imagination"
             }
         };
         
-        // 应用状态管理
         const AppState = {
             isAuthenticated: false,
             credentialId: null,
@@ -876,11 +963,11 @@
             customTexts: { ...CONFIG.defaultTexts }
         };
         
-        // DOM元素引用
         const DOM = {
             authContainer: document.getElementById('auth-container'),
             contentContainer: document.getElementById('content-container'),
             contentImage: document.querySelector('.content-image'),
+            imageDepthLayer: document.querySelector('.image-depth-layer'),
             textContent: document.querySelector('.text-content'),
             textLine1: document.querySelector('.text-line:first-child'),
             textLine2: document.querySelector('.text-line:last-child'),
@@ -899,7 +986,6 @@
             safeAreaGradient: document.querySelector('.safe-area-gradient')
         };
         
-        // 模态窗口管理器
         const ModalManager = {
             init: function() {
                 DOM.textEditTrigger.addEventListener('click', () => this.showModal());
@@ -968,7 +1054,8 @@
                 const images = [
                     DOM.contentImage,
                     DOM.blurBackground,
-                    DOM.imagePreview
+                    DOM.imagePreview,
+                    DOM.imageDepthLayer
                 ];
                 
                 images.forEach(img => {
@@ -1017,7 +1104,8 @@
                 const images = [
                     DOM.contentImage,
                     DOM.blurBackground,
-                    DOM.imagePreview
+                    DOM.imagePreview,
+                    DOM.imageDepthLayer
                 ];
                 
                 images.forEach(img => {
@@ -1030,7 +1118,6 @@
             }
         };
         
-        // 认证管理器
         const AuthManager = {
             init: function() {
                 if (!window.PublicKeyCredential) {
@@ -1152,7 +1239,6 @@
             }
         };
         
-        // UI管理器
         const UI = {
             showContent: function() {
                 DOM.authContainer.style.opacity = "0";
@@ -1170,7 +1256,6 @@
             }
         };
         
-        // 初始化应用
         function initApp() {
             AuthManager.init();
             ModalManager.init();
