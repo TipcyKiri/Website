@@ -29,12 +29,11 @@
             height: 100%;
             min-height: 100vh;
             min-height: -webkit-fill-available;
-            overflow: hidden;
         }
 
         body {
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             min-height: 100vh;
             min-height: -webkit-fill-available;
             overflow: hidden;
@@ -50,13 +49,6 @@
             left: 0;
             right: 0;
             bottom: 0;
-            /* 安全区域填充 */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-            margin: 0;
-            box-sizing: border-box;
         }
 
         /* 安全区域变量定义 */
@@ -79,21 +71,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* 使用环境变量直接填充安全区域 */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
+            padding-top: var(--safe-area-inset-top);
+            padding-bottom: var(--safe-area-inset-bottom);
+            padding-left: var(--safe-area-inset-left);
+            padding-right: var(--safe-area-inset-right);
             z-index: 100;
             overflow: hidden;
             transition: opacity 0.3s ease;
             box-sizing: border-box;
-            /* 确保覆盖安全区域 */
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: 0;
         }
 
         .auth-button-container {
@@ -195,17 +180,11 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             overflow: hidden;
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
+            padding-top: var(--safe-area-inset-top);
+            padding-bottom: var(--safe-area-inset-bottom);
+            padding-left: var(--safe-area-inset-left);
+            padding-right: var(--safe-area-inset-right);
             box-sizing: border-box;
-            /* 确保覆盖安全区域 */
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: 0;
         }
 
         #content-container.active {
@@ -213,14 +192,13 @@
             display: block;
         }
 
-        /* 模糊背景层 - 新的方法：使用绝对定位和transform来覆盖整个屏幕 */
+        /* 模糊背景层 */
         .blur-background {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            min-height: -webkit-fill-available;
+            width: 100%;
+            height: 100%;
             background-image: url('Mist.png');
             background-size: cover;
             background-position: center;
@@ -229,17 +207,11 @@
             z-index: 1;
             transform: scale(1.2);
             -webkit-transform: scale(1.2);
-            /* 确保覆盖整个视口，包括安全区域 */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(1.2);
-            -webkit-transform: translate(-50%, -50%) scale(1.2);
-            width: 100vw;
-            height: 100vh;
-            /* 使用视口单位确保覆盖 */
-            min-width: 100vw;
-            min-height: 100vh;
         }
+
+        
+
+        
 
         /* 主内容布局 - 优化居中 */
         .main-content {
@@ -259,7 +231,7 @@
             overflow: hidden;
             background-color: transparent;
             z-index: 4;
-            max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px);
+            max-height: calc(100% - var(--safe-area-inset-top) - var(--safe-area-inset-bottom) - 40px);
             box-sizing: border-box;
         }
 
@@ -702,11 +674,10 @@
             }
         }
 
-        /* iOS Web Clip 特定优化 - 修复背景层 */
+        /* iOS Web Clip 特定优化 */
         @supports (-webkit-touch-callout: none) {
             html, body {
                 min-height: -webkit-fill-available;
-                height: -webkit-fill-available;
             }
             
             .main-content {
@@ -715,40 +686,6 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 max-height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px);
-            }
-            
-            .blur-background {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                min-height: -webkit-fill-available;
-                background-image: url('Mist.png');
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                filter: blur(12px) brightness(0.75);
-                z-index: 1;
-                transform: scale(1.2);
-                -webkit-transform: scale(1.2);
-                /* iOS 特定修复：确保覆盖整个屏幕 */
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(1.2);
-                -webkit-transform: translate(-50%, -50%) scale(1.2);
-                width: 100vw;
-                height: 100vh;
-                /* 使用calc确保覆盖安全区域 */
-                width: calc(100vw + env(safe-area-inset-left) + env(safe-area-inset-right));
-                height: calc(100vh + env(safe-area-inset-top) + env(safe-area-inset-bottom));
-            }
-            
-            body {
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: env(safe-area-inset-bottom);
-                padding-left: env(safe-area-inset-left);
-                padding-right: env(safe-area-inset-right);
             }
         }
 
@@ -791,59 +728,6 @@
                 --safe-area-inset-left: constant(safe-area-inset-left, 0px);
                 --safe-area-inset-right: constant(safe-area-inset-right, 0px);
             }
-            
-            body {
-                padding-top: constant(safe-area-inset-top, 0px);
-                padding-bottom: constant(safe-area-inset-bottom, 0px);
-                padding-left: constant(safe-area-inset-left, 0px);
-                padding-right: constant(safe-area-inset-right, 0px);
-            }
-            
-            #auth-container {
-                padding-top: constant(safe-area-inset-top, 0px);
-                padding-bottom: constant(safe-area-inset-bottom, 0px);
-                padding-left: constant(safe-area-inset-left, 0px);
-                padding-right: constant(safe-area-inset-right, 0px);
-            }
-            
-            #content-container {
-                padding-top: constant(safe-area-inset-top, 0px);
-                padding-bottom: constant(safe-area-inset-bottom, 0px);
-                padding-left: constant(safe-area-inset-left, 0px);
-                padding-right: constant(safe-area-inset-right, 0px);
-            }
-            
-            .main-content {
-                max-height: calc(100% - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px) - 40px);
-            }
-            
-            @supports (-webkit-touch-callout: none) {
-                .blur-background {
-                    width: calc(100vw + constant(safe-area-inset-left, 0px) + constant(safe-area-inset-right, 0px));
-                    height: calc(100vh + constant(safe-area-inset-top, 0px) + constant(safe-area-inset-bottom, 0px));
-                }
-            }
-        }
-        
-        /* 修复背景层通用方法 */
-        .blur-background-fix {
-            /* 备用方法：使用多个背景层确保覆盖 */
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('Mist.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            filter: blur(12px) brightness(0.75);
-            z-index: 1;
-            /* 强制覆盖整个区域 */
-            width: 100vw;
-            height: 100vh;
-            min-width: 100vw;
-            min-height: 100vh;
         }
     </style>
 </head>
@@ -876,8 +760,12 @@
         </div>
     </div>
 
-    <!-- 模糊背景层 - 采用新方法确保覆盖整个屏幕 -->
-    <div class="blur-background blur-background-fix"></div>
+    <!-- 模糊背景层 -->
+    <div class="blur-background"></div>
+    
+    
+    
+    
 
     <!-- 模态窗口 -->
     <div class="modal-overlay" id="modalOverlay">
@@ -955,7 +843,9 @@
             textInput2: document.getElementById('textInput2'),
             saveButton: document.getElementById('saveButton'),
             cancelButton: document.getElementById('cancelButton'),
-            blurBackground: document.querySelector('.blur-background')
+            blurBackground: document.querySelector('.blur-background'),
+            gradientMask: document.querySelector('.gradient-mask'),
+            safeAreaGradient: document.querySelector('.safe-area-gradient')
         };
         
         // 模态窗口管理器
@@ -1224,32 +1114,8 @@
                     setTimeout(() => {
                         DOM.contentContainer.classList.add('active');
                         ModalManager.ensureImageCover();
-                        
-                        // 额外的修复：确保背景层正确覆盖
-                        this.fixBackgroundCoverage();
                     }, 50);
                 }, 300);
-            },
-            
-            fixBackgroundCoverage: function() {
-                // 确保背景层覆盖整个屏幕
-                const blurBackground = DOM.blurBackground;
-                if (blurBackground) {
-                    blurBackground.style.width = '100vw';
-                    blurBackground.style.height = '100vh';
-                    blurBackground.style.minWidth = '100vw';
-                    blurBackground.style.minHeight = '100vh';
-                    blurBackground.style.top = '0';
-                    blurBackground.style.left = '0';
-                    blurBackground.style.right = '0';
-                    blurBackground.style.bottom = '0';
-                    
-                    // iOS 特定修复
-                    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-                        const safeAreaBottom = getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom') || '0px';
-                        blurBackground.style.height = `calc(100vh + ${safeAreaBottom})`;
-                    }
-                }
             }
         };
         
@@ -1257,15 +1123,6 @@
         function initApp() {
             AuthManager.init();
             ModalManager.init();
-            
-            // 初始修复背景层
-            UI.fixBackgroundCoverage();
-            
-            // 监听窗口变化
-            window.addEventListener('resize', UI.fixBackgroundCoverage);
-            window.addEventListener('orientationchange', function() {
-                setTimeout(UI.fixBackgroundCoverage, 300);
-            });
         }
         
         if (document.readyState === 'loading') {
