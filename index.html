@@ -29,6 +29,8 @@
             height: 100%;
             min-height: 100vh;
             min-height: -webkit-fill-available;
+            /* 防止滚动 */
+            overflow: hidden;
         }
 
         body {
@@ -49,6 +51,9 @@
             left: 0;
             right: 0;
             bottom: 0;
+            /* 确保body扩展到边缘 */
+            margin: 0;
+            padding: 0;
         }
 
         /* 安全区域变量定义 */
@@ -192,24 +197,68 @@
             display: block;
         }
 
-        /* 模糊背景层 - 修复：确保覆盖整个屏幕包括安全区域 */
+        /* 模糊背景层 - 多重方法确保完全覆盖 */
         .blur-background {
             position: fixed;
-            top: calc(-1 * var(--safe-area-inset-top));
-            left: calc(-1 * var(--safe-area-inset-left));
-            width: calc(100% + var(--safe-area-inset-left) + var(--safe-area-inset-right));
-            height: calc(100% + var(--safe-area-inset-top) + var(--safe-area-inset-bottom));
+            /* 方法1: 四边定位，确保覆盖所有区域 */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            
+            /* 方法2: 使用绝对定位加负边距扩展 */
+            width: 100%;
+            height: 100%;
+            
+            /* 方法3: 使用视口单位确保覆盖 */
+            min-width: 100vw;
+            min-height: 100vh;
+            
+            /* 方法4: 添加额外扩展以防止安全区域问题 */
+            margin: 0;
+            padding: 0;
+            
             background-image: url('Mist.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* 恢复模糊和亮度调节 */
+            background-attachment: fixed; /* 确保背景固定 */
+            
+            /* 模糊和亮度调节 */
             filter: blur(12px) brightness(0.75);
+            -webkit-filter: blur(12px) brightness(0.75);
+            
+            /* 放大以确保边缘无空隙 */
+            transform: scale(1.1);
+            -webkit-transform: scale(1.1);
+            
             z-index: 1;
-            transform: scale(1.2);
-            -webkit-transform: scale(1.2);
-            /* 确保背景扩展到安全区域之外 */
-            min-height: 100%;
+            
+            /* 确保背景层在安全区域外也可见 */
+            overflow: hidden;
+            
+            /* 修复iOS Safari的渲染问题 */
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        /* 额外的覆盖层确保没有空隙 */
+        .blur-background::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background-image: inherit;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: inherit;
+            -webkit-filter: inherit;
+            z-index: -1;
         }
 
         /* 主内容布局 - 优化居中 */
@@ -677,6 +726,8 @@
         @supports (-webkit-touch-callout: none) {
             html, body {
                 min-height: -webkit-fill-available;
+                height: -webkit-fill-available;
+                overflow: hidden;
             }
             
             .main-content {
@@ -688,10 +739,16 @@
             }
             
             .blur-background {
-                top: calc(-1 * env(safe-area-inset-top, 0px));
-                left: calc(-1 * env(safe-area-inset-left, 0px));
-                width: calc(100% + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
-                height: calc(100% + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
+                /* iOS 特定修复：使用 env() 直接计算 */
+                top: env(safe-area-inset-top, 0px);
+                left: env(safe-area-inset-left, 0px);
+                right: env(safe-area-inset-right, 0px);
+                bottom: env(safe-area-inset-bottom, 0px);
+                width: auto;
+                height: auto;
+                min-width: auto;
+                min-height: auto;
+                transform: scale(1.15); /* iOS上稍微增加缩放 */
             }
         }
 
@@ -735,6 +792,14 @@
                 --safe-area-inset-right: constant(safe-area-inset-right, 0px);
             }
         }
+        
+        /* 移动端高度修复 */
+        @media (max-height: 700px) {
+            .blur-background {
+                transform: scale(1.15);
+                -webkit-transform: scale(1.15);
+            }
+        }
     </style>
 </head>
 <body class="no-scroll">
@@ -766,8 +831,8 @@
         </div>
     </div>
 
-    <!-- 模糊背景层 - 修复后：确保覆盖整个屏幕包括安全区域 -->
-    <div class="blur-background"></div>
+    <!-- 模糊背景层 - 使用多种方法确保完全覆盖 -->
+    <div class="blur-background" id="blurBackground"></div>
 
     <!-- 模态窗口 -->
     <div class="modal-overlay" id="modalOverlay">
@@ -845,7 +910,144 @@
             textInput2: document.getElementById('textInput2'),
             saveButton: document.getElementById('saveButton'),
             cancelButton: document.getElementById('cancelButton'),
-            blurBackground: document.querySelector('.blur-background')
+            blurBackground: document.getElementById('blurBackground')
+        };
+        
+        // 背景管理器 - 新增：专门处理背景覆盖问题
+        const BackgroundManager = {
+            init: function() {
+                this.adjustBackgroundForSafeAreas();
+                window.addEventListener('resize', () => this.adjustBackgroundForSafeAreas());
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(() => this.adjustBackgroundForSafeAreas(), 300);
+                });
+                
+                // iOS 特定修复
+                if (this.isIOS()) {
+                    this.applyIOSFixes();
+                }
+            },
+            
+            adjustBackgroundForSafeAreas: function() {
+                const blurBackground = DOM.blurBackground;
+                
+                // 方法1: 获取视口尺寸
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+                
+                // 方法2: 获取文档尺寸
+                const documentWidth = document.documentElement.clientWidth;
+                const documentHeight = document.documentElement.clientHeight;
+                
+                // 使用较大的尺寸
+                const targetWidth = Math.max(viewportWidth, documentWidth);
+                const targetHeight = Math.max(viewportHeight, documentHeight);
+                
+                // 设置背景层尺寸（稍微放大以确保覆盖）
+                blurBackground.style.width = targetWidth * 1.1 + 'px';
+                blurBackground.style.height = targetHeight * 1.1 + 'px';
+                
+                // 居中背景
+                blurBackground.style.left = '50%';
+                blurBackground.style.top = '50%';
+                blurBackground.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                
+                // 安全区域检测和调整
+                this.applySafeAreaInsets();
+            },
+            
+            applySafeAreaInsets: function() {
+                // 获取安全区域值
+                const safeAreaTop = this.getSafeAreaInset('top');
+                const safeAreaBottom = this.getSafeAreaInset('bottom');
+                const safeAreaLeft = this.getSafeAreaInset('left');
+                const safeAreaRight = this.getSafeAreaInset('right');
+                
+                // 调整背景层位置以覆盖安全区域
+                const blurBackground = DOM.blurBackground;
+                
+                // 扩展背景层以确保覆盖安全区域
+                const extendedTop = -safeAreaTop;
+                const extendedBottom = -safeAreaBottom;
+                const extendedLeft = -safeAreaLeft;
+                const extendedRight = -safeAreaRight;
+                
+                // 应用扩展
+                blurBackground.style.top = extendedTop + 'px';
+                blurBackground.style.bottom = extendedBottom + 'px';
+                blurBackground.style.left = extendedLeft + 'px';
+                blurBackground.style.right = extendedRight + 'px';
+            },
+            
+            getSafeAreaInset: function(side) {
+                // 尝试获取CSS环境变量
+                const value = getComputedStyle(document.documentElement).getPropertyValue(`--safe-area-inset-${side}`);
+                
+                if (value && value !== '0px') {
+                    return parseInt(value);
+                }
+                
+                // 尝试使用env()函数
+                if (CSS.supports('top: env(safe-area-inset-top)')) {
+                    // 创建一个临时元素来测量
+                    const tempDiv = document.createElement('div');
+                    tempDiv.style.position = 'fixed';
+                    tempDiv.style.visibility = 'hidden';
+                    tempDiv.style[side] = `env(safe-area-inset-${side})`;
+                    document.body.appendChild(tempDiv);
+                    const computedValue = getComputedStyle(tempDiv)[side];
+                    document.body.removeChild(tempDiv);
+                    
+                    if (computedValue && computedValue !== 'auto') {
+                        return parseInt(computedValue) || 0;
+                    }
+                }
+                
+                // 默认值
+                return 0;
+            },
+            
+            isIOS: function() {
+                return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            },
+            
+            applyIOSFixes: function() {
+                // iOS特定修复
+                document.documentElement.style.height = '100%';
+                document.body.style.height = '100%';
+                
+                // 防止弹性滚动
+                document.body.style.overscrollBehavior = 'none';
+                
+                // 确保背景层覆盖整个屏幕
+                setTimeout(() => {
+                    DOM.blurBackground.style.width = '100%';
+                    DOM.blurBackground.style.height = '100%';
+                    DOM.blurBackground.style.position = 'fixed';
+                    DOM.blurBackground.style.top = '0';
+                    DOM.blurBackground.style.left = '0';
+                    DOM.blurBackground.style.right = '0';
+                    DOM.blurBackground.style.bottom = '0';
+                    DOM.blurBackground.style.transform = 'scale(1.2)';
+                }, 100);
+            },
+            
+            ensureFullCoverage: function() {
+                // 强制重新计算和应用背景尺寸
+                setTimeout(() => {
+                    this.adjustBackgroundForSafeAreas();
+                }, 50);
+                
+                // 第二次检查，确保完全覆盖
+                setTimeout(() => {
+                    const viewportHeight = window.innerHeight;
+                    const backgroundHeight = DOM.blurBackground.offsetHeight;
+                    
+                    if (backgroundHeight < viewportHeight) {
+                        DOM.blurBackground.style.height = viewportHeight * 1.2 + 'px';
+                    }
+                }, 200);
+            }
         };
         
         // 模态窗口管理器
@@ -928,6 +1130,9 @@
                         img.style.backgroundRepeat = 'no-repeat';
                     }
                 });
+                
+                // 更新背景后，确保它仍然完全覆盖
+                BackgroundManager.ensureFullCoverage();
             },
             
             saveContent: function() {
@@ -976,6 +1181,8 @@
                         img.style.backgroundRepeat = 'no-repeat';
                     }
                 });
+                
+                BackgroundManager.ensureFullCoverage();
             }
         };
         
@@ -1114,6 +1321,8 @@
                     setTimeout(() => {
                         DOM.contentContainer.classList.add('active');
                         ModalManager.ensureImageCover();
+                        // 确保背景完全覆盖
+                        BackgroundManager.ensureFullCoverage();
                     }, 50);
                 }, 300);
             }
@@ -1123,6 +1332,17 @@
         function initApp() {
             AuthManager.init();
             ModalManager.init();
+            BackgroundManager.init();
+            
+            // 初始背景调整
+            setTimeout(() => {
+                BackgroundManager.ensureFullCoverage();
+            }, 100);
+            
+            // 窗口变化时重新调整背景
+            window.addEventListener('resize', () => {
+                BackgroundManager.ensureFullCoverage();
+            });
         }
         
         if (document.readyState === 'loading') {
