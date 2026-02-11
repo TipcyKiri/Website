@@ -192,7 +192,7 @@
             display: block;
         }
 
-        /* 背景层 - 修改：清晰背景，无模糊，无遮罩 */
+        /* 背景层 - 清晰背景，无模糊 */
         .blur-background {
             position: fixed;
             top: 0;
@@ -203,21 +203,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* 取消模糊和亮度调整 */
-            /* filter: blur(12px) brightness(0.75); */
-            /* 取消放大效果 */
-            /* transform: scale(1.2); */
             z-index: 1;
-        }
-
-        /* 渐变遮罩层 - 隐藏 */
-        .gradient-mask {
-            display: none;
-        }
-
-        /* 安全区域渐变层 - 隐藏 */
-        .safe-area-gradient {
-            display: none;
         }
 
         /* 主内容布局 - 优化居中 */
@@ -767,14 +753,8 @@
         </div>
     </div>
 
-    <!-- 背景层 - 修改后：清晰背景，无模糊，无遮罩 -->
+    <!-- 背景层 - 清晰背景，无模糊 -->
     <div class="blur-background"></div>
-    
-    <!-- 渐变遮罩层 - 隐藏 -->
-    <div class="gradient-mask"></div>
-    
-    <!-- 安全区域渐变层 - 隐藏 -->
-    <div class="safe-area-gradient"></div>
 
     <!-- 模态窗口 -->
     <div class="modal-overlay" id="modalOverlay">
@@ -852,9 +832,7 @@
             textInput2: document.getElementById('textInput2'),
             saveButton: document.getElementById('saveButton'),
             cancelButton: document.getElementById('cancelButton'),
-            blurBackground: document.querySelector('.blur-background'),
-            gradientMask: document.querySelector('.gradient-mask'),
-            safeAreaGradient: document.querySelector('.safe-area-gradient')
+            blurBackground: document.querySelector('.blur-background')
         };
         
         // 模态窗口管理器
