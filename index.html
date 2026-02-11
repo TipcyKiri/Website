@@ -192,18 +192,24 @@
             display: block;
         }
 
-        /* 背景层 - 清晰背景，无模糊 */
+        /* 模糊背景层 - 修复：确保覆盖整个屏幕包括安全区域 */
         .blur-background {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: calc(-1 * var(--safe-area-inset-top));
+            left: calc(-1 * var(--safe-area-inset-left));
+            width: calc(100% + var(--safe-area-inset-left) + var(--safe-area-inset-right));
+            height: calc(100% + var(--safe-area-inset-top) + var(--safe-area-inset-bottom));
             background-image: url('Mist.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            /* 恢复模糊和亮度调节 */
+            filter: blur(12px) brightness(0.75);
             z-index: 1;
+            transform: scale(1.2);
+            -webkit-transform: scale(1.2);
+            /* 确保背景扩展到安全区域之外 */
+            min-height: 100%;
         }
 
         /* 主内容布局 - 优化居中 */
@@ -680,6 +686,13 @@
                 transform: translate(-50%, -50%);
                 max-height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px);
             }
+            
+            .blur-background {
+                top: calc(-1 * env(safe-area-inset-top, 0px));
+                left: calc(-1 * env(safe-area-inset-left, 0px));
+                width: calc(100% + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
+                height: calc(100% + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
+            }
         }
 
         /* iPhone SE 等小屏幕优化 */
@@ -753,7 +766,7 @@
         </div>
     </div>
 
-    <!-- 背景层 - 清晰背景，无模糊 -->
+    <!-- 模糊背景层 - 修复后：确保覆盖整个屏幕包括安全区域 -->
     <div class="blur-background"></div>
 
     <!-- 模态窗口 -->
