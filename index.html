@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -188,18 +189,16 @@
     /* 模糊背景层 - FULL SCREEN */
     .blur-background {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        top: -10%;
+        left: -10%;
+        width: 120%;
+        height: 120%;
         background-image: url('Mist.png');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         filter: blur(12px) brightness(0.75);
         z-index: 1;
-        transform: scale(1.1);
-        -webkit-transform: scale(1.1);
     }
 
     /* 主内容布局 - 优化居中 */
@@ -220,7 +219,6 @@
         overflow: hidden;
         background-color: transparent;
         z-index: 4;
-        max-height: 100%;
         box-sizing: border-box;
     }
 
@@ -667,14 +665,6 @@
     @supports (-webkit-touch-callout: none) {
         html, body {
             min-height: -webkit-fill-available;
-        }
-        
-        .main-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-height: 100%;
         }
     }
 
