@@ -27,15 +27,18 @@
 
 ```
     html {
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         min-height: 100vh;
         min-height: -webkit-fill-available;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
     }
 
     body {
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         min-height: 100vh;
         min-height: -webkit-fill-available;
         overflow: hidden;
@@ -43,23 +46,17 @@
         font-family: Impact;
         color: #FFFFFF;
         font-weight: 700;
-        position: relative;
-        touch-action: none;
-        /* iOS Web Clip 优化 */
         position: fixed;
+        touch-action: none;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
+        margin: 0;
+        padding: 0;
     }
 
-    /* 安全区域变量定义 */
-    :root {
-        --safe-area-inset-top: env(safe-area-inset-top, 0px);
-        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-        --safe-area-inset-left: env(safe-area-inset-left, 0px);
-        --safe-area-inset-right: env(safe-area-inset-right, 0px);
-    }
+
 
     /* 认证界面 - 优化居中 */
     #auth-container {
@@ -186,19 +183,23 @@
         display: block;
     }
 
-    /* 模糊背景层 - FULL SCREEN */
+    /* 模糊背景层 - FULL SCREEN INCLUDING SAFE AREAS */
     .blur-background {
         position: fixed;
-        top: -10%;
-        left: -10%;
-        width: 120%;
-        height: 120%;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
         background-image: url('Mist.png');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         filter: blur(12px) brightness(0.75);
         z-index: 1;
+        margin: 0;
+        padding: 0;
     }
 
     /* 主内容布局 - 优化居中 */
@@ -666,6 +667,14 @@
         html, body {
             min-height: -webkit-fill-available;
         }
+        
+        .blur-background {
+            height: 100vh;
+            height: -webkit-fill-available;
+            bottom: 0;
+            transform: scale(1.05);
+            transform-origin: center center;
+        }
     }
 
     /* iPhone SE 等小屏幕优化 */
@@ -697,17 +706,7 @@
     .no-scroll {
         overflow: hidden;
     }
-    
-    /* 为不支持env()的浏览器提供回退 */
-    @supports not (top: env(safe-area-inset-top)) {
-        :root {
-            --safe-area-inset-top: constant(safe-area-inset-top, 0px);
-            --safe-area-inset-top: constant(safe-area-inset-top, 0px);
-            --safe-area-inset-bottom: constant(safe-area-inset-bottom, 0px);
-            --safe-area-inset-left: constant(safe-area-inset-left, 0px);
-            --safe-area-inset-right: constant(safe-area-inset-right, 0px);
-        }
-    }
+
 </style>
 ```
 
