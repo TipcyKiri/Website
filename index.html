@@ -200,37 +200,14 @@
             width: 100%;
             height: 100%;
             background-image: url('Mist.png');
-            background-size: cover;
+            background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
             filter: blur(12px) brightness(0.75);
             z-index: 1;
-            transform: scale(1.2);
-            -webkit-transform: scale(1.2);
         }
 
-        /* 渐变遮罩层 */
-        .gradient-mask {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
-            background: 
-                radial-gradient(
-                    circle at center,
-                    transparent 0%,
-                    transparent 30%,
-                    rgba(0, 0, 0, 0.1) 40%,
-                    rgba(0, 0, 0, 0.3) 50%,
-                    rgba(0, 0, 0, 0.6) 60%,
-                    rgba(0, 0, 0, 0.8) 70%,
-                    rgba(0, 0, 0, 0.9) 80%,
-                    #000000 100%
-                );
-        }
+
 
 
 
@@ -784,8 +761,6 @@
     <!-- 模糊背景层 -->
     <div class="blur-background"></div>
     
-    <!-- 渐变遮罩层 -->
-    <div class="gradient-mask"></div>
     
 
     <!-- 模态窗口 -->
@@ -865,7 +840,6 @@
             saveButton: document.getElementById('saveButton'),
             cancelButton: document.getElementById('cancelButton'),
             blurBackground: document.querySelector('.blur-background'),
-            gradientMask: document.querySelector('.gradient-mask'),
         };
         
         // 模态窗口管理器
