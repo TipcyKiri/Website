@@ -189,27 +189,23 @@
         display: block;
     }
 
-    /* UPDATED: Full screen background */
+    /* UPDATED: Full screen background extending into safe areas */
     .blur-background {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
+        top: calc(var(--safe-area-inset-top) * -1);
+        left: calc(var(--safe-area-inset-left) * -1);
+        right: calc(var(--safe-area-inset-right) * -1);
+        bottom: calc(var(--safe-area-inset-bottom) * -1);
+        width: calc(100vw + var(--safe-area-inset-left) + var(--safe-area-inset-right));
+        height: calc(100vh + var(--safe-area-inset-top) + var(--safe-area-inset-bottom));
         background-image: url('Mist.png');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         filter: blur(12px) brightness(0.75);
         z-index: 1;
-        transform: scale(1.1);
-        -webkit-transform: scale(1.1);
-        margin-top: calc(var(--safe-area-inset-top) * -1);
-        margin-bottom: calc(var(--safe-area-inset-bottom) * -1);
-        margin-left: calc(var(--safe-area-inset-left) * -1);
-        margin-right: calc(var(--safe-area-inset-right) * -1);
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
+        transform: scale(1.05);
+        -webkit-transform: scale(1.05);
     }
 
     .gradient-mask {
