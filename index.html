@@ -92,7 +92,7 @@
             border: none;
             border-radius: 0;
             padding: 20px 15px;
-            font-size: 52px;
+            font-size: 72px;
             font-weight: 400;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -163,7 +163,7 @@
             text-align: center;
         }
 
-        #contentcontent-container {
+        #content-container {
             display: none;
             position: fixed;
             top: 0;
@@ -354,6 +354,7 @@
             display: flex;
             align-items: stretch;
             gap: 12px;
+            justify-content: space-between;
         }
 
         .text-content {
@@ -370,16 +371,17 @@
             font-weight: 700;
             color: rgba(255, 255, 255, 0.65);
             font-size: 45px;
-            width: 75px;
+            width: auto;
             align-self: stretch;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-end;
             cursor: pointer;
             transition: all 0.2s ease;
             mix-blend-mode: screen;
             border-radius: 8px;
             flex-shrink: 0;
+            padding-left: 10px;
         }
 
         .text-edit-trigger:active {
@@ -617,9 +619,10 @@
             }
             
             .text-edit-trigger {
-                width: 55px;
+                width: auto;
                 font-size: 45px;
                 border-radius: 7px;
+                padding-left: 10px;
             }
             
             .text-line:first-child {
@@ -650,9 +653,10 @@
             }
             
             .text-edit-trigger {
-                width: 38px;
+                width: auto;
                 font-size: 26px;
                 border-radius: 6px;
+                padding-left: 8px;
             }
             
             .text-line:first-child {
@@ -683,9 +687,10 @@
             }
             
             .text-edit-trigger {
-                width: 36px;
+                width: auto;
                 font-size: 24px;
                 border-radius: 6px;
+                padding-left: 8px;
             }
             
             .text-line:first-child {
@@ -730,8 +735,9 @@
             }
             
             .text-edit-trigger {
-                width: 34px;
+                width: auto;
                 font-size: 22px;
+                padding-left: 6px;
             }
         }
 
@@ -767,7 +773,7 @@
                 <div class="content-image" role="img" aria-label="Misty Imagination Logo"></div>
                 <div class="text-control-container">
                     <div class="text-content">
-                        <div class="text-line">'�</div>
+                        <div class="text-line">'</div>
                         <div class="text-line">Misty Imagination</div>
                     </div>
                     <div class="text-edit-trigger" title="Settings">Mist</div>
@@ -803,8 +809,8 @@
             <div class="modal-section">
                 <h3 class="section-title">Change Texts</h3>
                 <div class="text-input-container">
-                    <input type="text" class="text-input" id="textInput1" placeholder=",{NL��e,g" maxlength="20">
-                    <input type="text" class="text-input" id="textInput2" placeholder=",{�NL��e,g" maxlength="20">
+                    <input type="text" class="text-input" id="textInput1" placeholder=",{NLe,g" maxlength="20">
+                    <input type="text" class="text-input" id="textInput2" placeholder=",{NLe,g" maxlength="20">
                 </div>
             </div>
             
@@ -820,12 +826,12 @@
             webauthn: {
                 rpName: "Misty Imagination",
                 userName: "Misty Imagination",
-                userDisplayName: "'�@Misty Imagination'",
+                userDisplayName: "'@Misty Imagination'",
                 timeout: 60000
             },
             
             defaultTexts: {
-                line1: "'�",
+                line1: "'",
                 line2: "Misty Imagination"
             }
         };
@@ -948,7 +954,7 @@
                     };
                     localStorage.setItem('Mist_content', JSON.stringify(content));
                 } catch (e) {
-                    console.error("�OX[�Q�[1Y%�:", e);
+                    console.error("OX[Q[1Y%:", e);
                 }
             },
             
@@ -968,7 +974,7 @@
                         }
                     }
                 } catch (e) {
-                    console.error("�R}��OX[�Q�[1Y%�:", e);
+                    console.error("R}OX[Q[1Y%:", e);
                 }
             },
             
@@ -1020,7 +1026,7 @@
                         AppState.credentialId = Uint8Array.from(savedCredentialId.split(',').map(Number));
                     }
                 } catch (error) {
-                    console.error("�h�g�]�OX[�Q���e�Q�:", error);
+                    console.error("hg]OX[QeQ:", error);
                 }
             },
             
@@ -1035,7 +1041,7 @@
                         await this.registerNewCredential();
                     }
                 } catch (error) {
-                    console.error("����1Y%�:", error);
+                    console.error("1Y%:", error);
                     DOM.authButton.disabled = false;
                     DOM.authButton.classList.remove('auth-button-loading');
                 }
@@ -1100,7 +1106,7 @@
                 if (assertion) {
                     this.onAuthenticationSuccess();
                 } else {
-                    throw new Error("����1Y%�");
+                    throw new Error("1Y%");
                 }
             },
             
