@@ -207,7 +207,7 @@
             z-index: 1;
         }
 
-        /* 安全区域渐变层 - 强制保证上下安全区域显示效果，底部采用最小高度 */
+        /* 安全区域渐变层 - 强制保证上下安全区域显示效果 */
         .safe-area-gradient {
             position: fixed;
             top: 0;
@@ -216,27 +216,10 @@
             height: 100%;
             z-index: 3;
             pointer-events: none;
+            /* 简单粗暴：顶部和底部各加一个强渐变条，底部起始完全不透明 */
             background: 
-                /* 顶部渐变 - 保持不变 */
-                linear-gradient(
-                    to bottom,
-                    #000000 0%,
-                    rgba(0, 0, 0, 0.9) calc(var(--safe-area-inset-top) * 0.2),
-                    rgba(0, 0, 0, 0.7) calc(var(--safe-area-inset-top) * 0.4),
-                    rgba(0, 0, 0, 0.4) calc(var(--safe-area-inset-top) * 0.6),
-                    rgba(0, 0, 0, 0.2) calc(var(--safe-area-inset-top) * 0.8),
-                    transparent var(--safe-area-inset-top)
-                ),
-                /* 底部渐变 - 强制显示：使用 max() 确保最小渐变高度，加深起始黑色 */
-                linear-gradient(
-                    to top,
-                    #000000 0%,
-                    rgba(0, 0, 0, 0.95) calc(max(var(--safe-area-inset-bottom), 20px) * 0.2),
-                    rgba(0, 0, 0, 0.8) calc(max(var(--safe-area-inset-bottom), 20px) * 0.4),
-                    rgba(0, 0, 0, 0.6) calc(max(var(--safe-area-inset-bottom), 20px) * 0.6),
-                    rgba(0, 0, 0, 0.4) calc(max(var(--safe-area-inset-bottom), 20px) * 0.8),
-                    transparent max(var(--safe-area-inset-bottom), 20px)
-                );
+                linear-gradient(to bottom, #000000 0%, rgba(0,0,0,0.9) calc(var(--safe-area-inset-top) * 0.3), rgba(0,0,0,0.6) calc(var(--safe-area-inset-top) * 0.6), rgba(0,0,0,0.3) calc(var(--safe-area-inset-top) * 0.8), transparent var(--safe-area-inset-top)),
+                linear-gradient(to top, #000000 0%, #000000 calc(var(--safe-area-inset-bottom) * 0.2), rgba(0,0,0,0.95) calc(var(--safe-area-inset-bottom) * 0.4), rgba(0,0,0,0.8) calc(var(--safe-area-inset-bottom) * 0.6), rgba(0,0,0,0.5) calc(var(--safe-area-inset-bottom) * 0.8), transparent var(--safe-area-inset-bottom));
         }
 
         /* 主内容布局 - 优化居中 */
@@ -789,7 +772,7 @@
     <!-- 模糊背景层 - 自适应铺满 -->
     <div class="blur-background"></div>
     
-    <!-- 安全区域渐变层 - 强制保证顶部&底部安全区域显示效果（底部使用最小高度） -->
+    <!-- 安全区域渐变层 - 强制保证顶部&底部安全区域显示效果（底部增强） -->
     <div class="safe-area-gradient"></div>
 
     <!-- 模态窗口 -->
