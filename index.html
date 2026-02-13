@@ -1,4 +1,3 @@
-备份
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -10,7 +9,6 @@
     <meta name="description" content="Misty Imagination">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="Mist.png">
-    <!-- iOS Web Clip 启动画面 -->
     <link rel="apple-touch-startup-image" href="Mist.png">
     <title>Misty Imagination</title>
     <style>
@@ -44,7 +42,6 @@
             font-weight: 700;
             position: relative;
             touch-action: none;
-            /* iOS Web Clip 优化 */
             position: fixed;
             top: 0;
             left: 0;
@@ -52,7 +49,6 @@
             bottom: 0;
         }
 
-        /* 安全区域变量定义 */
         :root {
             --safe-area-inset-top: env(safe-area-inset-top, 0px);
             --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
@@ -60,7 +56,6 @@
             --safe-area-inset-right: env(safe-area-inset-right, 0px);
         }
 
-        /* 认证界面 - 优化居中 */
         #auth-container {
             position: fixed;
             top: 0;
@@ -168,7 +163,6 @@
             text-align: center;
         }
 
-        /* 主内容区域 - 优化居中 */
         #content-container {
             display: none;
             position: fixed;
@@ -193,7 +187,6 @@
             display: block;
         }
 
-        /* 模糊背景层 */
         .blur-background {
             position: fixed;
             top: 0;
@@ -204,13 +197,12 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            filter: blur(12px) brightness(1);
+            filter: blur(12px) brightness(0.75);
             z-index: 1;
             transform: scale(1.2);
             -webkit-transform: scale(1.2);
         }
 
-        /* 渐变遮罩层 */
         .gradient-mask {
             position: fixed;
             top: 0;
@@ -233,7 +225,6 @@
                 );
         }
 
-        /* 安全区域渐变层 - 优化 */
         .safe-area-gradient {
             position: fixed;
             top: 0;
@@ -263,7 +254,6 @@
                 );
         }
 
-        /* 主内容布局 - 优化居中 */
         .main-content {
             position: absolute;
             top: 50%;
@@ -285,7 +275,6 @@
             box-sizing: border-box;
         }
 
-        /* 内容层 - 优化 */
         .content-layer {
             position: relative;
             z-index: 2;
@@ -300,7 +289,6 @@
             gap: 15px;
         }
 
-        /* 主要图片 - 优化 */
         .content-image {
             width: 92%;
             aspect-ratio: 1;
@@ -318,7 +306,6 @@
             transition: transform 0.2s ease;
         }
 
-        /* 精致光泽 */
         .content-image::before {
             content: "";
             position: absolute;
@@ -338,7 +325,6 @@
             z-index: 1;
         }
 
-        /* 环境景深 */
         .content-image::after {
             content: "";
             position: absolute;
@@ -358,12 +344,10 @@
             pointer-events: none;
         }
 
-        /* 点击反馈 */
         .content-image:active {
             transform: translateZ(0) rotateY(0.3deg) scale(0.96);
         }
 
-        /* 文本和控制容器 */
         .text-control-container {
             width: 92%;
             max-width: 580px;
@@ -372,7 +356,6 @@
             gap: 12px;
         }
 
-        /* 文本内容容器 */
         .text-content {
             flex: 1;
             text-align: left;
@@ -382,7 +365,6 @@
             justify-content: center;
         }
 
-        /* 控制按钮"S" - 无背景 */
         .text-edit-trigger {
             font-family: Impact;
             font-weight: 700;
@@ -404,35 +386,28 @@
             transform: scale(0.92);
         }
 
-        /* 文本行样式 - 优化透明度和混合效果 */
         .text-line {
             font-family: Impact;
             font-weight: 700;
             width: 100%;
             line-height: 1.1;
-            /* 优化：使用更鲜明的混合模式 */
             mix-blend-mode: overlay;
-            /* 优化：添加微妙阴影增强可读性 */
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
         }
 
         .text-line:first-child {
-            /* 主文字：更高不透明度确保可读性 */
             color: rgba(255, 255, 255, 0.85);
             font-size: 26px;
             margin-bottom: 6px;
-            /* 主文字阴影稍强 */
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .text-line:last-child {
-            /* 副文字：稍低不透明度保持融入感 */
             color: rgba(255, 255, 255, 0.7);
             font-size: 22px;
             opacity: 0.9;
         }
 
-        /* 模态窗口 */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -560,7 +535,6 @@
             cursor: pointer;
         }
 
-        /* 文本输入样式 */
         .text-input-container {
             display: flex;
             flex-direction: column;
@@ -624,7 +598,6 @@
             background-color: #666666;
         }
 
-        /* iOS Web Clip 专用优化 - 增强版 */
         @media (max-width: 768px) {
             .content-image {
                 width: 90%;
@@ -724,7 +697,6 @@
             }
         }
 
-        /* iOS Web Clip 特定优化 */
         @supports (-webkit-touch-callout: none) {
             html, body {
                 min-height: -webkit-fill-available;
@@ -739,7 +711,6 @@
             }
         }
 
-        /* iPhone SE 等小屏幕优化 */
         @media (max-width: 375px) and (max-height: 667px) {
             .main-content {
                 padding: 15px 20px;
@@ -764,12 +735,10 @@
             }
         }
 
-        /* 防止滚动 */
         .no-scroll {
             overflow: hidden;
         }
         
-        /* 为不支持env()的浏览器提供回退 */
         @supports not (top: env(safe-area-inset-top)) {
             :root {
                 --safe-area-inset-top: constant(safe-area-inset-top, 0px);
@@ -782,7 +751,6 @@
     </style>
 </head>
 <body class="no-scroll">
-    <!-- Face ID认证界面 -->
     <div id="auth-container">
         <div class="auth-button-container">
             <button class="auth-button" id="authButton">
@@ -794,32 +762,27 @@
         </div>
     </div>
 
-    <!-- 主内容区域 -->
     <div id="content-container">
         <div class="main-content">
             <div class="content-layer">
                 <div class="content-image" role="img" aria-label="Misty Imagination Logo"></div>
                 <div class="text-control-container">
                     <div class="text-content">
-                        <div class="text-line">霧</div>
+                        <div class="text-line">'�</div>
                         <div class="text-line">Misty Imagination</div>
                     </div>
-                    <div class="text-edit-trigger" title="Settings">●</div>
+                    <div class="text-edit-trigger" title="Settings">Mist</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 模糊背景层 -->
     <div class="blur-background"></div>
     
-    <!-- 渐变遮罩层 -->
     <div class="gradient-mask"></div>
     
-    <!-- 安全区域渐变层 -->
     <div class="safe-area-gradient"></div>
 
-    <!-- 模态窗口 -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <div class="modal-header">
@@ -841,8 +804,8 @@
             <div class="modal-section">
                 <h3 class="section-title">Change Texts</h3>
                 <div class="text-input-container">
-                    <input type="text" class="text-input" id="textInput1" placeholder="第一行文本" maxlength="20">
-                    <input type="text" class="text-input" id="textInput2" placeholder="第二行文本" maxlength="20">
+                    <input type="text" class="text-input" id="textInput1" placeholder=",{NL��e,g" maxlength="20">
+                    <input type="text" class="text-input" id="textInput2" placeholder=",{�NL��e,g" maxlength="20">
                 </div>
             </div>
             
@@ -854,22 +817,20 @@
     </div>
 
     <script>
-        // 应用配置
         const CONFIG = {
             webauthn: {
                 rpName: "Misty Imagination",
                 userName: "Misty Imagination",
-                userDisplayName: "霧@Misty Imagination'",
+                userDisplayName: "'�@Misty Imagination'",
                 timeout: 60000
             },
             
             defaultTexts: {
-                line1: "霧",
+                line1: "'�",
                 line2: "Misty Imagination"
             }
         };
         
-        // 应用状态管理
         const AppState = {
             isAuthenticated: false,
             credentialId: null,
@@ -877,7 +838,6 @@
             customTexts: { ...CONFIG.defaultTexts }
         };
         
-        // DOM元素引用
         const DOM = {
             authContainer: document.getElementById('auth-container'),
             contentContainer: document.getElementById('content-container'),
@@ -900,7 +860,6 @@
             safeAreaGradient: document.querySelector('.safe-area-gradient')
         };
         
-        // 模态窗口管理器
         const ModalManager = {
             init: function() {
                 DOM.textEditTrigger.addEventListener('click', () => this.showModal());
@@ -990,7 +949,7 @@
                     };
                     localStorage.setItem('Mist_content', JSON.stringify(content));
                 } catch (e) {
-                    console.error("保存内容失败:", e);
+                    console.error("�OX[�Q�[1Y%�:", e);
                 }
             },
             
@@ -1010,7 +969,7 @@
                         }
                     }
                 } catch (e) {
-                    console.error("加载保存内容失败:", e);
+                    console.error("�R}��OX[�Q�[1Y%�:", e);
                 }
             },
             
@@ -1031,7 +990,6 @@
             }
         };
         
-        // 认证管理器
         const AuthManager = {
             init: function() {
                 if (!window.PublicKeyCredential) {
@@ -1063,7 +1021,7 @@
                         AppState.credentialId = Uint8Array.from(savedCredentialId.split(',').map(Number));
                     }
                 } catch (error) {
-                    console.error("检查已保存凭证时出错:", error);
+                    console.error("�h�g�]�OX[�Q���e�Q�:", error);
                 }
             },
             
@@ -1078,7 +1036,7 @@
                         await this.registerNewCredential();
                     }
                 } catch (error) {
-                    console.error("认证失败:", error);
+                    console.error("����1Y%�:", error);
                     DOM.authButton.disabled = false;
                     DOM.authButton.classList.remove('auth-button-loading');
                 }
@@ -1143,7 +1101,7 @@
                 if (assertion) {
                     this.onAuthenticationSuccess();
                 } else {
-                    throw new Error("认证失败");
+                    throw new Error("����1Y%�");
                 }
             },
             
@@ -1153,7 +1111,6 @@
             }
         };
         
-        // UI管理器
         const UI = {
             showContent: function() {
                 DOM.authContainer.style.opacity = "0";
@@ -1171,7 +1128,6 @@
             }
         };
         
-        // 初始化应用
         function initApp() {
             AuthManager.init();
             ModalManager.init();
