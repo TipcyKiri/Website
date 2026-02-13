@@ -205,8 +205,8 @@
             background-repeat: no-repeat;
             filter: blur(12px) brightness(0.75);
             z-index: 1;
-            transform: scale(1);
-            -webkit-transform: scale(1);
+            transform: scale(1.2);
+            -webkit-transform: scale(1.2);
         }
 
         /* 渐变遮罩层 */
@@ -230,11 +230,6 @@
                     rgba(0, 0, 0, 0.9) 80%,
                     #000000 100%
                 );
-        }
-
-        /* 安全区域渐变层 - 优化 */
-        .safe-area-gradient {
-            background: none
         }
 
         /* 主内容布局 - 优化居中 */
@@ -865,8 +860,7 @@
             saveButton: document.getElementById('saveButton'),
             cancelButton: document.getElementById('cancelButton'),
             blurBackground: document.querySelector('.blur-background'),
-            gradientMask: document.querySelector('.gradient-mask'),
-            safeAreaGradient: document.querySelector('.safe-area-gradient')
+            gradientMask: document.querySelector('.gradient-mask')
         };
         
         // 模态窗口管理器
