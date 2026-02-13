@@ -192,7 +192,7 @@
             display: block;
         }
 
-        /* 模糊背景层 */
+        /* 模糊背景层 - 自适应铺满全屏，无缩放 */
         .blur-background {
             position: fixed;
             top: 0;
@@ -205,61 +205,6 @@
             background-repeat: no-repeat;
             filter: blur(12px) brightness(0.75);
             z-index: 1;
-            transform: scale(1.2);
-            -webkit-transform: scale(1.2);
-        }
-
-        /* 渐变遮罩层 */
-        .gradient-mask {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
-            background: 
-                radial-gradient(
-                    circle at center,
-                    transparent 0%,
-                    transparent 30%,
-                    rgba(0, 0, 0, 0.1) 40%,
-                    rgba(0, 0, 0, 0.3) 50%,
-                    rgba(0, 0, 0, 0.6) 60%,
-                    rgba(0, 0, 0, 0.8) 70%,
-                    rgba(0, 0, 0, 0.9) 80%,
-                    #000000 100%
-                );
-        }
-
-        /* 安全区域渐变层 - 优化 */
-        .safe-area-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            pointer-events: none;
-            background: 
-                linear-gradient(
-                    to bottom,
-                    #000000 0%,
-                    rgba(0, 0, 0, 0.9) calc(var(--safe-area-inset-top) * 0.2),
-                    rgba(0, 0, 0, 0.7) calc(var(--safe-area-inset-top) * 0.4),
-                    rgba(0, 0, 0, 0.4) calc(var(--safe-area-inset-top) * 0.6),
-                    rgba(0, 0, 0, 0.2) calc(var(--safe-area-inset-top) * 0.8),
-                    transparent var(--safe-area-inset-top)
-                ),
-                linear-gradient(
-                    to top,
-                    #000000 0%,
-                    rgba(0, 0, 0, 0.9) calc(var(--safe-area-inset-bottom) * 0.2),
-                    rgba(0, 0, 0, 0.7) calc(var(--safe-area-inset-bottom) * 0.4),
-                    rgba(0, 0, 0, 0.4) calc(var(--safe-area-inset-bottom) * 0.6),
-                    rgba(0, 0, 0, 0.2) calc(var(--safe-area-inset-bottom) * 0.8),
-                    transparent var(--safe-area-inset-bottom)
-                );
         }
 
         /* 主内容布局 - 优化居中 */
@@ -809,9 +754,8 @@
         </div>
     </div>
 
-    <!-- 模糊背景层 -->
+    <!-- 模糊背景层 - 自适应铺满 -->
     <div class="blur-background"></div>
-    
 
     <!-- 模态窗口 -->
     <div class="modal-overlay" id="modalOverlay">
