@@ -9,7 +9,7 @@
     <meta name="description" content="Misty Imagination">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="Mist.png">
-    <!-- iOS Web Clip 启动画面 -->
+    <!-- iOS Web Clip /TR;ub -->
     <link rel="apple-touch-startup-image" href="Mist.png">
     <title>Misty Imagination</title>
     <style>
@@ -43,7 +43,7 @@
             font-weight: 700;
             position: relative;
             touch-action: none;
-            /* iOS Web Clip 优化 */
+            /* iOS Web Clip OS */
             position: fixed;
             top: 0;
             left: 0;
@@ -51,7 +51,7 @@
             bottom: 0;
         }
 
-        /* 安全区域变量定义 */
+        /*[hQ:SWSϑ[IN */
         :root {
             --safe-area-inset-top: env(safe-area-inset-top, 0px);
             --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
@@ -59,7 +59,7 @@
             --safe-area-inset-right: env(safe-area-inset-right, 0px);
         }
 
-        /* 认证界面 - 优化居中 */
+        /* Lub - OSE\-N */
         #auth-container {
             position: fixed;
             top: 0;
@@ -167,7 +167,7 @@
             text-align: center;
         }
 
-        /* 主内容区域 - 优化居中 */
+        /* ;NQ[:SW - OSE\-N */
         #content-container {
             display: none;
             position: fixed;
@@ -192,7 +192,7 @@
             display: block;
         }
 
-        /* 模糊背景层 */
+        /* !j|̀ofB\ */
         .blur-background {
             position: fixed;
             top: 0;
@@ -209,14 +209,66 @@
             -webkit-transform: scale(1.2);
         }
 
-        /* 主内容布局 - 优化居中 */
+        /* nSniB\ - 优化后的优雅黑色过渡 */
+        .gradient-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: 
+                radial-gradient(
+                    circle at center,
+                    transparent 0%,
+                    transparent 45%,
+                    rgba(0, 0, 0, 0.15) 55%,
+                    rgba(0, 0, 0, 0.35) 65%,
+                    rgba(0, 0, 0, 0.6) 75%,
+                    rgba(0, 0, 0, 0.85) 85%,
+                    #000000 100%
+                );
+        }
+
+        /*[hQ:SWnSB\ - OS */
+        .safe-area-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            background: 
+                linear-gradient(
+                    to bottom,
+                    #000000 0%,
+                    rgba(0, 0, 0, 0.9) calc(var(--safe-area-inset-top) * 0.2),
+                    rgba(0, 0, 0, 0.7) calc(var(--safe-area-inset-top) * 0.4),
+                    rgba(0, 0, 0, 0.4) calc(var(--safe-area-inset-top) * 0.6),
+                    rgba(0, 0, 0, 0.2) calc(var(--safe-area-inset-top) * 0.8),
+                    transparent var(--safe-area-inset-top)
+                ),
+                linear-gradient(
+                    to top,
+                    #000000 0%,
+                    rgba(0, 0, 0, 0.9) calc(var(--safe-area-inset-bottom) * 0.2),
+                    rgba(0, 0, 0, 0.7) calc(var(--safe-area-inset-bottom) * 0.4),
+                    rgba(0, 0, 0, 0.4) calc(var(--safe-area-inset-bottom) * 0.6),
+                    rgba(0, 0, 0, 0.2) calc(var(--safe-area-inset-bottom) * 0.8),
+                    transparent var(--safe-area-inset-bottom)
+                );
+        }
+
+        /* ;NQ[^@\ - OSE\-N */
         .main-content {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 700px;
+            width: 100%;
+            max-width: 900px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -231,7 +283,7 @@
             box-sizing: border-box;
         }
 
-        /* 内容层 - 优化 */
+        /*Q[B\ - OS */
         .content-layer {
             position: relative;
             z-index: 2;
@@ -243,28 +295,28 @@
             height: auto;
             background: transparent;
             isolation: isolate;
-            gap: 15px;
+            gap: 20px;
         }
 
-        /* 主要图片 - 优化 */
+        /* ;NVGr - OS - 增大图片面积 */
         .content-image {
-            width: 92%;
+            width: 96%;
             aspect-ratio: 1;
             border-radius: 50px;
             box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.3),
-                0 10px 20px rgba(0, 0, 0, 0.18), 
+                0 30px 60px rgba(0, 0, 0, 0.35),
+                0 12px 24px rgba(0, 0, 0, 0.22), 
                 inset 0 0 0 1px rgba(255, 255, 255, 0.1);
             transform: translateZ(0) rotateY(0.3deg);
             background: url('Mist.png') center/cover no-repeat;
             position: relative;
             flex-shrink: 0;
             overflow: hidden;
-            max-width: 580px;
+            max-width: 720px;
             transition: transform 0.2s ease;
         }
 
-        /* 精致光泽 */
+        /*|IQl */
         .content-image::before {
             content: "";
             position: absolute;
@@ -284,7 +336,7 @@
             z-index: 1;
         }
 
-        /* 环境景深 */
+        /*sXofm */
         .content-image::after {
             content: "";
             position: absolute;
@@ -304,21 +356,21 @@
             pointer-events: none;
         }
 
-        /* 点击反馈 */
+        /*pQS */
         .content-image:active {
             transform: translateZ(0) rotateY(0.3deg) scale(0.96);
         }
 
-        /* 文本和控制容器 */
+        /*e,gTc6R[hV */
         .text-control-container {
-            width: 92%;
-            max-width: 580px;
+            width: 96%;
+            max-width: 720px;
             display: flex;
             align-items: stretch;
-            gap: 12px;
+            gap: 15px;
         }
 
-        /* 文本内容容器 */
+        /*e,gQ[[hV */
         .text-content {
             flex: 1;
             text-align: left;
@@ -328,7 +380,7 @@
             justify-content: center;
         }
 
-        /* 控制按钮"S" - 无背景 */
+        /*c6R	c"S" -èof */
         .text-edit-trigger {
             font-family: Impact;
             font-weight: 700;
@@ -350,35 +402,39 @@
             transform: scale(0.92);
         }
 
-        /* 文本行样式 - 优化透明度和混合效果 */
+        /*e,gL7h_ - OSf^TmTHeg */
         .text-line {
             font-family: Impact;
             font-weight: 700;
             width: 100%;
             line-height: 1.1;
-            /* 优化：使用更鲜明的混合模式 */
+            /* OSO(uffvmT!j_ */
             mix-blend-mode: overlay;
-            /* 优化：添加微妙阴影增强可读性 */
+            /* OSmR_Y4q_X:_S'` */
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
         }
 
         .text-line:first-child {
-            /* 主文字：更高不透明度确保可读性 */
+            /* ;NeW[fؚ
+Nf^nxOS'` */
             color: rgba(255, 255, 255, 0.85);
-            font-size: 26px;
+            font-size: 28px;
             margin-bottom: 6px;
-            /* 主文字阴影稍强 */
+            /* ;NeW[4q_
+z:_ */
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .text-line:last-child {
-            /* 副文字：稍低不透明度保持融入感 */
+            /* oReW[
+zNO
+Nf^OceQa */
             color: rgba(255, 255, 255, 0.7);
-            font-size: 22px;
+            font-size: 24px;
             opacity: 0.9;
         }
 
-        /* 模态窗口 */
+        /* !j`zS */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -506,7 +562,7 @@
             cursor: pointer;
         }
 
-        /* 文本输入样式 */
+        /*e,geQ7h_ */
         .text-input-container {
             display: flex;
             flex-direction: column;
@@ -570,29 +626,62 @@
             background-color: #666666;
         }
 
-        /* iOS Web Clip 专用优化 - 增强版 */
+        /* iOS Web Clip N(uOS -X:_Hr */
         @media (max-width: 768px) {
             .content-image {
-                width: 90%;
-                border-radius: 40px;
-                max-width: 450px;
+                width: 94%;
+                border-radius: 45px;
+                max-width: 560px;
                 box-shadow: 
-                    0 22px 44px rgba(0, 0, 0, 0.25),
+                    0 26px 52px rgba(0, 0, 0, 0.3),
+                    0 10px 20px rgba(0, 0, 0, 0.18),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+                transform: translateZ(0) rotateY(0.3deg);
+            }
+            
+            .text-control-container {
+                width: 94%;
+                max-width: 560px;
+                gap: 12px;
+            }
+            
+            .text-edit-trigger {
+                width: 60px;
+                font-size: 45px;
+                border-radius: 7px;
+            }
+            
+            .text-line:first-child {
+                font-size: 26px;
+            }
+            
+            .text-line:last-child {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .content-image {
+                width: 96%;
+                border-radius: 40px;
+                max-width: 480px;
+                box-shadow: 
+                    0 22px 44px rgba(0, 0, 0, 0.28),
                     0 9px 18px rgba(0, 0, 0, 0.15),
                     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
                 transform: translateZ(0) rotateY(0.3deg);
             }
             
             .text-control-container {
-                width: 90%;
-                max-width: 450px;
+                width: 96%;
+                max-width: 480px;
                 gap: 10px;
             }
             
             .text-edit-trigger {
-                width: 55px;
-                font-size: 45px;
-                border-radius: 7px;
+                width: 42px;
+                font-size: 28px;
+                border-radius: 6px;
             }
             
             .text-line:first-child {
@@ -604,26 +693,26 @@
             }
         }
 
-        @media (max-width: 430px) {
+        @media (max-width: 390px) {
             .content-image {
-                width: 92%;
-                border-radius: 35px;
-                max-width: 395px;
+                width: 95%;
+                border-radius: 36px;
+                max-width: 420px;
                 box-shadow: 
-                    0 20px 40px rgba(0, 0, 0, 0.23),
-                    0 8px 16px rgba(0, 0, 0, 0.13),
+                    0 20px 40px rgba(0, 0, 0, 0.25),
+                    0 8px 16px rgba(0, 0, 0, 0.14),
                     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
                 transform: translateZ(0) rotateY(0.3deg);
             }
             
             .text-control-container {
-                width: 92%;
-                max-width: 395px;
-                gap: 8px;
+                width: 95%;
+                max-width: 420px;
+                gap: 10px;
             }
             
             .text-edit-trigger {
-                width: 38px;
+                width: 40px;
                 font-size: 26px;
                 border-radius: 6px;
             }
@@ -637,40 +726,7 @@
             }
         }
 
-        @media (max-width: 390px) {
-            .content-image {
-                width: 90%;
-                border-radius: 32px;
-                max-width: 351px;
-                box-shadow: 
-                    0 18px 36px rgba(0, 0, 0, 0.21),
-                    0 7px 14px rgba(0, 0, 0, 0.12),
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-                transform: translateZ(0) rotateY(0.3deg);
-            }
-            
-            .text-control-container {
-                width: 90%;
-                max-width: 351px;
-                gap: 8px;
-            }
-            
-            .text-edit-trigger {
-                width: 36px;
-                font-size: 24px;
-                border-radius: 6px;
-            }
-            
-            .text-line:first-child {
-                font-size: 20px;
-            }
-            
-            .text-line:last-child {
-                font-size: 16px;
-            }
-        }
-
-        /* iOS Web Clip 特定优化 */
+        /* iOS Web Clip yr[OS */
         @supports (-webkit-touch-callout: none) {
             html, body {
                 min-height: -webkit-fill-available;
@@ -685,37 +741,38 @@
             }
         }
 
-        /* iPhone SE 等小屏幕优化 */
+        /* iPhone SE I{\O\U^OS */
         @media (max-width: 375px) and (max-height: 667px) {
             .main-content {
                 padding: 15px 20px;
             }
             
             .content-image {
-                border-radius: 28px;
-                max-width: 300px;
+                border-radius: 32px;
+                max-width: 340px;
             }
             
             .text-line:first-child {
-                font-size: 18px;
+                font-size: 20px;
             }
             
             .text-line:last-child {
-                font-size: 14px;
+                font-size: 16px;
             }
             
             .text-edit-trigger {
-                width: 34px;
-                font-size: 22px;
+                width: 36px;
+                font-size: 24px;
             }
         }
 
-        /* 防止滚动 */
+        /* 2bknR */
         .no-scroll {
             overflow: hidden;
         }
         
-        /* 为不支持env()的浏览器提供回退 */
+        /* :N
+N/ecenv()vOmȉhVcOV */
         @supports not (top: env(safe-area-inset-top)) {
             :root {
                 --safe-area-inset-top: constant(safe-area-inset-top, 0px);
@@ -728,7 +785,7 @@
     </style>
 </head>
 <body class="no-scroll">
-    <!-- Face ID认证界面 -->
+    <!-- Face IDLub -->
     <div id="auth-container">
         <div class="auth-button-container">
             <button class="auth-button" id="authButton">
@@ -740,26 +797,32 @@
         </div>
     </div>
 
-    <!-- 主内容区域 -->
+    <!-- ;NQ[:SW -->
     <div id="content-container">
         <div class="main-content">
             <div class="content-layer">
                 <div class="content-image" role="img" aria-label="Misty Imagination Logo"></div>
                 <div class="text-control-container">
                     <div class="text-content">
-                        <div class="text-line">霧</div>
+                        <div class="text-line">'</div>
                         <div class="text-line">Misty Imagination</div>
                     </div>
-                    <div class="text-edit-trigger" title="Settings">●</div>
+                    <div class="text-edit-trigger" title="Settings">%</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 模糊背景层 -->
+    <!-- !j|̀ofB\ -->
     <div class="blur-background"></div>
+    
+    <!-- nSniB\ -->
+    <div class="gradient-mask"></div>
+    
+    <!--[hQ:SWnSB\ -->
+    <div class="safe-area-gradient"></div>
 
-    <!-- 模态窗口 -->
+    <!-- !j`zS -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <div class="modal-header">
@@ -781,8 +844,8 @@
             <div class="modal-section">
                 <h3 class="section-title">Change Texts</h3>
                 <div class="text-input-container">
-                    <input type="text" class="text-input" id="textInput1" placeholder="第一行文本" maxlength="20">
-                    <input type="text" class="text-input" id="textInput2" placeholder="第二行文本" maxlength="20">
+                    <input type="text" class="text-input" id="textInput1" placeholder=",{NLe,g" maxlength="20">
+                    <input type="text" class="text-input" id="textInput2" placeholder=",{NLe,g" maxlength="20">
                 </div>
             </div>
             
@@ -794,22 +857,22 @@
     </div>
 
     <script>
-        // 应用配置
+        //^(uMn
         const CONFIG = {
             webauthn: {
                 rpName: "Misty Imagination",
                 userName: "Misty Imagination",
-                userDisplayName: "霧@Misty Imagination'",
+                userDisplayName: "'@Misty Imagination'",
                 timeout: 60000
             },
             
             defaultTexts: {
-                line1: "霧",
+                line1: "'",
                 line2: "Misty Imagination"
             }
         };
         
-        // 应用状态管理
+        //^(ur`{t
         const AppState = {
             isAuthenticated: false,
             credentialId: null,
@@ -817,7 +880,7 @@
             customTexts: { ...CONFIG.defaultTexts }
         };
         
-        // DOM元素引用
+        // DOMCQ }_(u
         const DOM = {
             authContainer: document.getElementById('auth-container'),
             contentContainer: document.getElementById('content-container'),
@@ -835,10 +898,590 @@
             textInput2: document.getElementById('textInput2'),
             saveButton: document.getElementById('saveButton'),
             cancelButton: document.getElementById('cancelButton'),
-            blurBackground: document.querySelector('.blur-background')
+            blurBackground: document.querySelector('.blur-background'),
+            gradientMask: document.querySelector('.gradient-mask'),
+            safeAreaGradient: document.querySelector('.safe-area-gradient')
         };
         
-        // 模态窗口管理器
+        // !j`zS{thV
+        const ModalManager = {
+            init: function() {
+                DOM.textEditTrigger.addEventListener('click', () => this.showModal());
+                DOM.modalClose.addEventListener('click', () => this.hideModal());
+                DOM.cancelButton.addEventListener('click', () => this.hideModal());
+                DOM.saveButton.addEventListener('click', () => this.saveChanges());
+                DOM.imageInput.addEventListener('change', (e) => this.handleImageUpload(e));
+                
+                DOM.modalOverlay.addEventListener('click', (e) => {
+                    if (e.target === DOM.modalOverlay) {
+                        this.hideModal();
+                    }
+                });
+                
+                this.loadSavedContent();
+            },
+            
+            showModal: function() {
+                if (AppState.customImage) {
+                    DOM.imagePreview.style.backgroundImage = `url(${AppState.customImage})`;
+                } else {
+                    DOM.imagePreview.style.backgroundImage = "url('Mist.png')";
+                }
+                
+                DOM.textInput1.value = AppState.customTexts.line1 || '';
+                DOM.textInput2.value = AppState.customTexts.line2 || '';
+                
+                DOM.modalOverlay.classList.add('active');
+                document.body.classList.add('no-scroll');
+            },
+            
+            hideModal: function() {
+                DOM.modalOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            },
+            
+            handleImageUpload: function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        DOM.imagePreview.style.backgroundImage = `url(${e.target.result})`;
+                        AppState.tempImage = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            },
+            
+            saveChanges: function() {
+                if (AppState.tempImage) {
+                    AppState.customImage = AppState.tempImage;
+                    this.updateImages();
+                    AppState.tempImage = null;
+                }
+                
+                AppState.customTexts.line1 = DOM.textInput1.value || CONFIG.defaultTexts.line1;
+                AppState.customTexts.line2 = DOM.textInput2.value || CONFIG.defaultTexts.line2;
+                DOM.textLine1.textContent = AppState.customTexts.line1;
+                DOM.textLine2.textContent = AppState.customTexts.line2;
+                
+                this.saveContent();
+                this.hideModal();
+            },
+            
+            updateImages: function() {
+                const images = [
+                    DOM.contentImage,
+                    DOM.blurBackground;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .text-edit-trigger:active {
+            transform: scale(0.92);
+        }
+
+        /*e,gL7h_ - OSf^TmTHeg */
+        .text-line {
+            font-family: Impact;
+            font-weight: 700;
+            width: 100%;
+            line-height: 1.1;
+            /* OSO(uffvmT!j_ */
+            mix-blend-mode: overlay;
+            /* OSmR_Y4q_X:_S'` */
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .text-line:first-child {
+            /* ;NeW[fؚ
+Nf^nxOS'` */
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 28px;
+            margin-bottom: 6px;
+            /* ;NeW[4q_
+z:_ */
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .text-line:last-child {
+            /* oReW[
+zNO
+Nf^OceQa */
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            opacity: 0.9;
+        }
+
+        /* !j`zS */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: Impact;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 28px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+            font-family: Impact;
+        }
+
+        .modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-family: Impact;
+        }
+
+        .image-preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            background: #333333 url('Mist.png') center/cover no-repeat;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-button {
+            background-color: #4a4a4a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            font-family: Impact;
+        }
+
+        .file-input-button:hover {
+            background-color: #5a5a5a;
+        }
+
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /*e,geQ7h_ */
+        .text-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .text-input {
+            background-color: #2a2a2a;
+            border: 2px solid #3a3a3a;
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: white;
+            font-size: 16px;
+            font-family: Impact;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #5a5a5a;
+        }
+
+        .text-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .modal-button {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: Impact;
+        }
+
+        .modal-button.save {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .modal-button.save:hover {
+            background-color: #45a049;
+        }
+
+        .modal-button.cancel {
+            background-color: #757575;
+            color: white;
+        }
+
+        .modal-button.cancel:hover {
+            background-color: #666666;
+        }
+
+        /* iOS Web Clip N(uOS -X:_Hr */
+        @media (max-width: 768px) {
+            .content-image {
+                width: 94%;
+                border-radius: 45px;
+                max-width: 560px;
+                box-shadow: 
+                    0 26px 52px rgba(0, 0, 0, 0.3),
+                    0 10px 20px rgba(0, 0, 0, 0.18),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+                transform: translateZ(0) rotateY(0.3deg);
+            }
+            
+            .text-control-container {
+                width: 94%;
+                max-width: 560px;
+                gap: 12px;
+            }
+            
+            .text-edit-trigger {
+                width: 60px;
+                font-size: 45px;
+                border-radius: 7px;
+            }
+            
+            .text-line:first-child {
+                font-size: 26px;
+            }
+            
+            .text-line:last-child {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .content-image {
+                width: 96%;
+                border-radius: 40px;
+                max-width: 480px;
+                box-shadow: 
+                    0 22px 44px rgba(0, 0, 0, 0.28),
+                    0 9px 18px rgba(0, 0, 0, 0.15),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+                transform: translateZ(0) rotateY(0.3deg);
+            }
+            
+            .text-control-container {
+                width: 96%;
+                max-width: 480px;
+                gap: 10px;
+            }
+            
+            .text-edit-trigger {
+                width: 42px;
+                font-size: 28px;
+                border-radius: 6px;
+            }
+            
+            .text-line:first-child {
+                font-size: 24px;
+            }
+            
+            .text-line:last-child {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .content-image {
+                width: 95%;
+                border-radius: 36px;
+                max-width: 420px;
+                box-shadow: 
+                    0 20px 40px rgba(0, 0, 0, 0.25),
+                    0 8px 16px rgba(0, 0, 0, 0.14),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+                transform: translateZ(0) rotateY(0.3deg);
+            }
+            
+            .text-control-container {
+                width: 95%;
+                max-width: 420px;
+                gap: 10px;
+            }
+            
+            .text-edit-trigger {
+                width: 40px;
+                font-size: 26px;
+                border-radius: 6px;
+            }
+            
+            .text-line:first-child {
+                font-size: 22px;
+            }
+            
+            .text-line:last-child {
+                font-size: 18px;
+            }
+        }
+
+        /* iOS Web Clip yr[OS */
+        @supports (-webkit-touch-callout: none) {
+            html, body {
+                min-height: -webkit-fill-available;
+            }
+            
+            .main-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                max-height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px);
+            }
+        }
+
+        /* iPhone SE I{\O\U^OS */
+        @media (max-width: 375px) and (max-height: 667px) {
+            .main-content {
+                padding: 15px 20px;
+            }
+            
+            .content-image {
+                border-radius: 32px;
+                max-width: 340px;
+            }
+            
+            .text-line:first-child {
+                font-size: 20px;
+            }
+            
+            .text-line:last-child {
+                font-size: 16px;
+            }
+            
+            .text-edit-trigger {
+                width: 36px;
+                font-size: 24px;
+            }
+        }
+
+        /* 2bknR */
+        .no-scroll {
+            overflow: hidden;
+        }
+        
+        /* :N
+N/ecenv()vOmȉhVcOV */
+        @supports not (top: env(safe-area-inset-top)) {
+            :root {
+                --safe-area-inset-top: constant(safe-area-inset-top, 0px);
+                --safe-area-inset-top: constant(safe-area-inset-top, 0px);
+                --safe-area-inset-bottom: constant(safe-area-inset-bottom, 0px);
+                --safe-area-inset-left: constant(safe-area-inset-left, 0px);
+                --safe-area-inset-right: constant(safe-area-inset-right, 0px);
+            }
+        }
+    </style>
+</head>
+<body class="no-scroll">
+    <!-- Face IDLub -->
+    <div id="auth-container">
+        <div class="auth-button-container">
+            <button class="auth-button" id="authButton">
+                <div class="button-text-container">
+                    <div class="button-main-text">MISTY</div>
+                    <div class="button-sub-text">IMAGINATION</div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- ;NQ[:SW -->
+    <div id="content-container">
+        <div class="main-content">
+            <div class="content-layer">
+                <div class="content-image" role="img" aria-label="Misty Imagination Logo"></div>
+                <div class="text-control-container">
+                    <div class="text-content">
+                        <div class="text-line">'</div>
+                        <div class="text-line">Misty Imagination</div>
+                    </div>
+                    <div class="text-edit-trigger" title="Settings">%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- !j|̀ofB\ -->
+    <div class="blur-background"></div>
+    
+    <!-- nSniB\ -->
+    <div class="gradient-mask"></div>
+    
+    <!--[hQ:SWnSB\ -->
+    <div class="safe-area-gradient"></div>
+
+    <!-- !j`zS -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Settings</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="section-title">Change Picture</h3>
+                <div class="image-preview-container">
+                    <div class="image-preview" id="imagePreview"></div>
+                    <div class="file-input-wrapper">
+                        <div class="file-input-button">Select Picture</div>
+                        <input type="file" class="file-input" id="imageInput" accept="image/*">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="section-title">Change Texts</h3>
+                <div class="text-input-container">
+                    <input type="text" class="text-input" id="textInput1" placeholder=",{NLe,g" maxlength="20">
+                    <input type="text" class="text-input" id="textInput2" placeholder=",{NLe,g" maxlength="20">
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-button save" id="saveButton">Save</button>
+                <button class="modal-button cancel" id="cancelButton">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //^(uMn
+        const CONFIG = {
+            webauthn: {
+                rpName: "Misty Imagination",
+                userName: "Misty Imagination",
+                userDisplayName: "'@Misty Imagination'",
+                timeout: 60000
+            },
+            
+            defaultTexts: {
+                line1: "'",
+                line2: "Misty Imagination"
+            }
+        };
+        
+        //^(ur`{t
+        const AppState = {
+            isAuthenticated: false,
+            credentialId: null,
+            customImage: null,
+            customTexts: { ...CONFIG.defaultTexts }
+        };
+        
+        // DOMCQ }_(u
+        const DOM = {
+            authContainer: document.getElementById('auth-container'),
+            contentContainer: document.getElementById('content-container'),
+            contentImage: document.querySelector('.content-image'),
+            textContent: document.querySelector('.text-content'),
+            textLine1: document.querySelector('.text-line:first-child'),
+            textLine2: document.querySelector('.text-line:last-child'),
+            textEditTrigger: document.querySelector('.text-edit-trigger'),
+            authButton: document.getElementById('authButton'),
+            modalOverlay: document.getElementById('modalOverlay'),
+            modalClose: document.getElementById('modalClose'),
+            imageInput: document.getElementById('imageInput'),
+            imagePreview: document.getElementById('imagePreview'),
+            textInput1: document.getElementById('textInput1'),
+            textInput2: document.getElementById('textInput2'),
+            saveButton: document.getElementById('saveButton'),
+            cancelButton: document.getElementById('cancelButton'),
+            blurBackground: document.querySelector('.blur-background'),
+            gradientMask: document.querySelector('.gradient-mask'),
+            safeAreaGradient: document.querySelector('.safe-area-gradient')
+        };
+        
+        // !j`zS{thV
         const ModalManager = {
             init: function() {
                 DOM.textEditTrigger.addEventListener('click', () => this.showModal());
@@ -928,7 +1571,7 @@
                     };
                     localStorage.setItem('Mist_content', JSON.stringify(content));
                 } catch (e) {
-                    console.error("保存内容失败:", e);
+                    console.error("OX[Q[1Y%:", e);
                 }
             },
             
@@ -948,7 +1591,7 @@
                         }
                     }
                 } catch (e) {
-                    console.error("加载保存内容失败:", e);
+                    console.error("R}OX[Q[1Y%:", e);
                 }
             },
             
@@ -969,7 +1612,7 @@
             }
         };
         
-        // 认证管理器
+        // {thV
         const AuthManager = {
             init: function() {
                 if (!window.PublicKeyCredential) {
@@ -1001,7 +1644,7 @@
                         AppState.credentialId = Uint8Array.from(savedCredentialId.split(',').map(Number));
                     }
                 } catch (error) {
-                    console.error("检查已保存凭证时出错:", error);
+                    console.error("hg]OX[QeQ:", error);
                 }
             },
             
@@ -1016,7 +1659,7 @@
                         await this.registerNewCredential();
                     }
                 } catch (error) {
-                    console.error("认证失败:", error);
+                    console.error("1Y%:", error);
                     DOM.authButton.disabled = false;
                     DOM.authButton.classList.remove('auth-button-loading');
                 }
@@ -1081,7 +1724,7 @@
                 if (assertion) {
                     this.onAuthenticationSuccess();
                 } else {
-                    throw new Error("认证失败");
+                    throw new Error("1Y%");
                 }
             },
             
@@ -1091,7 +1734,7 @@
             }
         };
         
-        // UI管理器
+        // UI{thV
         const UI = {
             showContent: function() {
                 DOM.authContainer.style.opacity = "0";
@@ -1109,7 +1752,7 @@
             }
         };
         
-        // 初始化应用
+        // RYS^(u
         function initApp() {
             AuthManager.init();
             ModalManager.init();
