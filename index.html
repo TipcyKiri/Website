@@ -207,7 +207,7 @@
             z-index: 1;
         }
 
-        /* 安全区域渐变层 - 强制保证上下安全区域显示效果 */
+        /* 安全区域渐变层 - 优化 */
         .safe-area-gradient {
             position: fixed;
             top: 0;
@@ -753,6 +753,19 @@
                 --safe-area-inset-right: constant(safe-area-inset-right, 0px);
             }
         }
+
+        /* ===== 强制手段：底部安全区域纯黑显示 ===== */
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--safe-area-inset-bottom);
+            background: #000000;
+            z-index: 3;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="no-scroll">
@@ -787,7 +800,7 @@
     <!-- 模糊背景层 - 自适应铺满 -->
     <div class="blur-background"></div>
     
-    <!-- 安全区域渐变层 - 强制保证顶部&底部安全区域显示效果（无全屏黑色过渡） -->
+    <!-- 安全区域渐变层（顶部保留，底部由强制伪元素接管） -->
     <div class="safe-area-gradient"></div>
 
     <!-- 模态窗口 -->
