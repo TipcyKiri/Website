@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+认真阅读代码，除下列要求外，不得修改此代码的任何部分，包括设计同排版：令主页面的背景图片能够在整个屏幕上显示，包括上下两个安全区域，当前图片未能在下部区域正确显示：<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -192,7 +192,7 @@
             display: block;
         }
 
-        /* 模糊背景层 - 自适应铺满全屏，无缩放 */
+        /* 模糊背景层 */
         .blur-background {
             position: fixed;
             top: 0;
@@ -205,9 +205,34 @@
             background-repeat: no-repeat;
             filter: blur(12px) brightness(0.75);
             z-index: 1;
+            transform: scale(1);
+            -webkit-transform: scale(1);
         }
 
-        /* 安全区域渐变层 - 强制保证上下安全区域显示效果 */
+        /* 渐变遮罩层 */
+        .gradient-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: 
+                radial-gradient(
+                    circle at center,
+                    transparent 0%,
+                    transparent 30%,
+                    rgba(0, 0, 0, 0.1) 40%,
+                    rgba(0, 0, 0, 0.3) 50%,
+                    rgba(0, 0, 0, 0.6) 60%,
+                    rgba(0, 0, 0, 0.8) 70%,
+                    rgba(0, 0, 0, 0.9) 80%,
+                    #000000 100%
+                );
+        }
+
+        /* 安全区域渐变层 - 优化 */
         .safe-area-gradient {
             position: fixed;
             top: 0;
@@ -216,10 +241,25 @@
             height: 100%;
             z-index: 3;
             pointer-events: none;
-            /* 简单粗暴：顶部和底部各加一个强渐变条，底部起始完全不透明 */
             background: 
-                linear-gradient(to bottom, #000000 0%, rgba(0,0,0,0.9) calc(var(--safe-area-inset-top) * 0.3), rgba(0,0,0,0.6) calc(var(--safe-area-inset-top) * 0.6), rgba(0,0,0,0.3) calc(var(--safe-area-inset-top) * 0.8), transparent var(--safe-area-inset-top)),
-                linear-gradient(to top, #000000 0%, #000000 calc(var(--safe-area-inset-bottom) * 0.2), rgba(0,0,0,0.95) calc(var(--safe-area-inset-bottom) * 0.4), rgba(0,0,0,0.8) calc(var(--safe-area-inset-bottom) * 0.6), rgba(0,0,0,0.5) calc(var(--safe-area-inset-bottom) * 0.8), transparent var(--safe-area-inset-bottom));
+                linear-gradient(
+                    to bottom,
+                    #000000 0%,
+                    rgba(0, 0, 0, 0.9) calc(var(--safe-area-inset-top) * 0.2),
+                    rgba(0, 0, 0, 0.7) calc(var(--safe-area-inset-top) * 0.4),
+                    rgba(0, 0, 0, 0.4) calc(var(--safe-area-inset-top) * 0.6),
+                    rgba(0, 0, 0, 0.2) calc(var(--safe-area-inset-top) * 0.8),
+                    transparent var(--safe-area-inset-top)
+                ),
+                linear-gradient(
+                    to top,
+                    #000000 0%,
+                    rgba(0, 0, 0, 0.9) calc(var(--safe-area-inset-bottom) * 0.2),
+                    rgba(0, 0, 0, 0.7) calc(var(--safe-area-inset-bottom) * 0.4),
+                    rgba(0, 0, 0, 0.4) calc(var(--safe-area-inset-bottom) * 0.6),
+                    rgba(0, 0, 0, 0.2) calc(var(--safe-area-inset-bottom) * 0.8),
+                    transparent var(--safe-area-inset-bottom)
+                );
         }
 
         /* 主内容布局 - 优化居中 */
@@ -769,11 +809,9 @@
         </div>
     </div>
 
-    <!-- 模糊背景层 - 自适应铺满 -->
+    <!-- 模糊背景层 -->
     <div class="blur-background"></div>
     
-    <!-- 安全区域渐变层 - 强制保证顶部&底部安全区域显示效果（底部增强） -->
-    <div class="safe-area-gradient"></div>
 
     <!-- 模态窗口 -->
     <div class="modal-overlay" id="modalOverlay">
