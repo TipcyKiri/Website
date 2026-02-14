@@ -293,6 +293,7 @@
            width: 92%;
            aspect-ratio: 1;
            border-radius: 50px;
+           transform: translateZ(0) rotateY(0.3deg);
            background: url('Mist.png') center/cover no-repeat;
            position: relative;
            flex-shrink: 0;
@@ -301,17 +302,12 @@
            pointer-events: none;
            user-select: none;
            -webkit-user-drag: none;
-           transform: translateZ(0) rotateY(0.3deg);
            box-shadow: 
-               0 1px 0 rgba(255, 255, 255, 0.15) inset,
-               0 -1px 0 rgba(0, 0, 0, 0.3) inset,
-               0 0 0 1px rgba(255, 255, 255, 0.08),
-               0 0 0 8px rgba(255, 255, 255, 0.03),
-               0 0 0 16px rgba(255, 255, 255, 0.02),
-               0 0 0 24px rgba(255, 255, 255, 0.01),
-               0 35px 70px rgba(0, 0, 0, 0.4),
-               0 15px 30px rgba(0, 0, 0, 0.25),
-               0 5px 15px rgba(0, 0, 0, 0.15);
+               0 35px 70px -10px rgba(0, 0, 0, 0.6),
+               0 20px 40px -5px rgba(0, 0, 0, 0.4),
+               0 8px 16px rgba(0, 0, 0, 0.3),
+               inset 0 2px 4px rgba(255, 255, 255, 0.15),
+               inset 0 -2px 4px rgba(0, 0, 0, 0.2);
        }
 
        .content-image::before {
@@ -321,18 +317,23 @@
            left: 0;
            right: 0;
            bottom: 0;
+           border-radius: 50px;
+           padding: 3px;
            background: linear-gradient(
                135deg,
-               rgba(255, 255, 255, 0.1) 0%,
-               rgba(255, 255, 255, 0.05) 25%,
-               transparent 50%,
-               rgba(0, 0, 0, 0.05) 75%,
-               rgba(0, 0, 0, 0.1) 100%
+               rgba(255, 255, 255, 0.4) 0%,
+               rgba(255, 255, 255, 0.1) 25%,
+               rgba(255, 255, 255, 0.05) 50%,
+               rgba(255, 255, 255, 0.1) 75%,
+               rgba(255, 255, 255, 0.3) 100%
            );
-           border-radius: 50px;
+           -webkit-mask: 
+               linear-gradient(#fff 0 0) content-box, 
+               linear-gradient(#fff 0 0);
+           -webkit-mask-composite: xor;
+           mask-composite: exclude;
            pointer-events: none;
-           z-index: 1;
-           border: 1px solid rgba(255, 255, 255, 0.1);
+           z-index: 10;
        }
 
        .content-image::after {
@@ -352,6 +353,40 @@
            transform: scale(0.88);
            z-index: -1;
            pointer-events: none;
+       }
+
+       .content-image .inner-glow {
+           position: absolute;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           border-radius: 50px;
+           pointer-events: none;
+           z-index: 5;
+           box-shadow: 
+               inset 0 1px 2px rgba(255, 255, 255, 0.2),
+               inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+       }
+
+       .content-image .depth-layer {
+           position: absolute;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           border-radius: 50px;
+           pointer-events: none;
+           z-index: 6;
+           background: linear-gradient(
+               180deg,
+               rgba(255, 255, 255, 0.08) 0%,
+               rgba(255, 255, 255, 0.02) 15%,
+               transparent 30%,
+               transparent 70%,
+               rgba(0, 0, 0, 0.05) 85%,
+               rgba(0, 0, 0, 0.15) 100%
+           );
        }
 
        .text-control-container {
@@ -612,16 +647,21 @@
                border-radius: 40px;
                max-width: 450px;
                box-shadow: 
-                   0 1px 0 rgba(255, 255, 255, 0.12) inset,
-                   0 -1px 0 rgba(0, 0, 0, 0.25) inset,
-                   0 0 0 1px rgba(255, 255, 255, 0.06),
-                   0 0 0 6px rgba(255, 255, 255, 0.025),
-                   0 0 0 12px rgba(255, 255, 255, 0.015),
-                   0 0 0 18px rgba(255, 255, 255, 0.008),
-                   0 30px 60px rgba(0, 0, 0, 0.35),
-                   0 12px 24px rgba(0, 0, 0, 0.2),
-                   0 4px 12px rgba(0, 0, 0, 0.12);
-               transform: translateZ(0) rotateY(0.3deg);
+                   0 30px 60px -8px rgba(0, 0, 0, 0.55),
+                   0 18px 36px -4px rgba(0, 0, 0, 0.35),
+                   0 7px 14px rgba(0, 0, 0, 0.25),
+                   inset 0 2px 4px rgba(255, 255, 255, 0.15),
+                   inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+           }
+           
+           .content-image::before {
+               border-radius: 40px;
+               padding: 2.5px;
+           }
+           
+           .content-image .inner-glow,
+           .content-image .depth-layer {
+               border-radius: 40px;
            }
            
            .text-control-container {
@@ -652,16 +692,21 @@
                border-radius: 35px;
                max-width: 395px;
                box-shadow: 
-                   0 1px 0 rgba(255, 255, 255, 0.1) inset,
-                   0 -1px 0 rgba(0, 0, 0, 0.2) inset,
-                   0 0 0 1px rgba(255, 255, 255, 0.05),
-                   0 0 0 5px rgba(255, 255, 255, 0.02),
-                   0 0 0 10px rgba(255, 255, 255, 0.012),
-                   0 0 0 15px rgba(255, 255, 255, 0.006),
-                   0 25px 50px rgba(0, 0, 0, 0.3),
-                   0 10px 20px rgba(0, 0, 0, 0.18),
-                   0 3px 10px rgba(0, 0, 0, 0.1);
-               transform: translateZ(0) rotateY(0.3deg);
+                   0 28px 56px -8px rgba(0, 0, 0, 0.5),
+                   0 16px 32px -4px rgba(0, 0, 0, 0.3),
+                   0 6px 12px rgba(0, 0, 0, 0.22),
+                   inset 0 2px 3px rgba(255, 255, 255, 0.15),
+                   inset 0 -2px 3px rgba(0, 0, 0, 0.2);
+           }
+           
+           .content-image::before {
+               border-radius: 35px;
+               padding: 2px;
+           }
+           
+           .content-image .inner-glow,
+           .content-image .depth-layer {
+               border-radius: 35px;
            }
            
            .text-control-container {
@@ -692,16 +737,21 @@
                border-radius: 32px;
                max-width: 351px;
                box-shadow: 
-                   0 1px 0 rgba(255, 255, 255, 0.08) inset,
-                   0 -1px 0 rgba(0, 0, 0, 0.15) inset,
-                   0 0 0 1px rgba(255, 255, 255, 0.04),
-                   0 0 0 4px rgba(255, 255, 255, 0.018),
-                   0 0 0 8px rgba(255, 255, 255, 0.01),
-                   0 0 0 12px rgba(255, 255, 255, 0.005),
-                   0 22px 44px rgba(0, 0, 0, 0.28),
-                   0 9px 18px rgba(0, 0, 0, 0.15),
-                   0 3px 9px rgba(0, 0, 0, 0.08);
-               transform: translateZ(0) rotateY(0.3deg);
+                   0 25px 50px -6px rgba(0, 0, 0, 0.48),
+                   0 14px 28px -3px rgba(0, 0, 0, 0.28),
+                   0 6px 12px rgba(0, 0, 0, 0.2),
+                   inset 0 1.5px 3px rgba(255, 255, 255, 0.15),
+                   inset 0 -1.5px 3px rgba(0, 0, 0, 0.2);
+           }
+           
+           .content-image::before {
+               border-radius: 32px;
+               padding: 2px;
+           }
+           
+           .content-image .inner-glow,
+           .content-image .depth-layer {
+               border-radius: 32px;
            }
            
            .text-control-container {
@@ -749,15 +799,21 @@
                border-radius: 28px;
                max-width: 300px;
                box-shadow: 
-                   0 1px 0 rgba(255, 255, 255, 0.06) inset,
-                   0 -1px 0 rgba(0, 0, 0, 0.12) inset,
-                   0 0 0 1px rgba(255, 255, 255, 0.03),
-                   0 0 0 3px rgba(255, 255, 255, 0.015),
-                   0 0 0 6px rgba(255, 255, 255, 0.008),
-                   0 0 0 9px rgba(255, 255, 255, 0.004),
-                   0 18px 36px rgba(0, 0, 0, 0.25),
-                   0 7px 14px rgba(0, 0, 0, 0.12),
-                   0 2px 7px rgba(0, 0, 0, 0.06);
+                   0 22px 44px -6px rgba(0, 0, 0, 0.45),
+                   0 12px 24px -3px rgba(0, 0, 0, 0.25),
+                   0 5px 10px rgba(0, 0, 0, 0.18),
+                   inset 0 1.5px 3px rgba(255, 255, 255, 0.15),
+                   inset 0 -1.5px 3px rgba(0, 0, 0, 0.2);
+           }
+           
+           .content-image::before {
+               border-radius: 28px;
+               padding: 2px;
+           }
+           
+           .content-image .inner-glow,
+           .content-image .depth-layer {
+               border-radius: 28px;
            }
            
            .text-line:first-child {
@@ -804,7 +860,10 @@
    <div id="content-container">
        <div class="main-content">
            <div class="content-layer">
-               <div class="content-image" role="img" aria-label="Mist Logo"></div>
+               <div class="content-image" role="img" aria-label="Mist Logo">
+                   <div class="inner-glow"></div>
+                   <div class="depth-layer"></div>
+               </div>
                <div class="text-control-container">
                    <div class="text-content">
                        <div class="text-line">Mist</div>
