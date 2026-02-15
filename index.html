@@ -427,7 +427,7 @@
       }
 
       .modal-content {
-          background-color: #1a1a1a;
+          background-color: rgba(30, 30, 30, 0.75);
           width: 90%;
           max-width: 500px;
           border-radius: 20px;
@@ -437,6 +437,9 @@
           display: flex;
           flex-direction: column;
           gap: 20px;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .modal-header {
@@ -509,7 +512,7 @@
       }
 
       .file-input-button {
-          background-color: #4a4a4a;
+          background-color: rgba(74, 74, 74, 0.6);
           color: white;
           padding: 12px 20px;
           border-radius: 10px;
@@ -519,10 +522,11 @@
           transition: background-color 0.3s ease;
           width: 100%;
           font-family: Impact;
+          border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .file-input-button:hover {
-          background-color: #5a5a5a;
+          background-color: rgba(90, 90, 90, 0.8);
       }
 
       .file-input {
@@ -543,8 +547,8 @@
       }
 
       .text-input {
-          background-color: #2a2a2a;
-          border: 2px solid #3a3a3a;
+          background-color: rgba(42, 42, 42, 0.6);
+          border: 2px solid rgba(58, 58, 58, 0.5);
           border-radius: 10px;
           padding: 12px 15px;
           color: white;
@@ -556,7 +560,7 @@
 
       .text-input:focus {
           outline: none;
-          border-color: #5a5a5a;
+          border-color: rgba(90, 90, 90, 0.8);
       }
 
       .text-input::placeholder {
@@ -581,21 +585,21 @@
       }
 
       .modal-button.save {
-          background-color: #4CAF50;
+          background-color: rgba(76, 175, 80, 0.8);
           color: white;
       }
 
       .modal-button.save:hover {
-          background-color: #45a049;
+          background-color: rgba(69, 160, 73, 0.9);
       }
 
       .modal-button.cancel {
-          background-color: #757575;
+          background-color: rgba(117, 117, 117, 0.6);
           color: white;
       }
 
       .modal-button.cancel:hover {
-          background-color: #666666;
+          background-color: rgba(102, 102, 102, 0.8);
       }
 
       @media (max-width: 768px) {
