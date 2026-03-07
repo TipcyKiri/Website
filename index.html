@@ -1150,6 +1150,114 @@
           window.scrollTo(0, 0);
           return false;
       }
+
+      // ===== 新增功能：保存图片到相册 (完全独立，不修改原有代码) =====
+      (function setupSaveImageFeature() {
+          // 动态加载 html2canvas 库
+          function loadHtml2Canvas() {
+              return new Promise((resolve, reject) => {
+                  if (window.html2canvas) {
+                      resolve(window.html2canvas);
+                      return;
+                  }
+                  const script = document.createElement('script');
+                  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/6.0.0-alpha.2/html2canvas.min.js';
+                  script.onload = () => resolve(window.html2canvas);
+                  script.onerror = () => reject(new Error('html2canvas 加载失败'));
+                  document.head.appendChild(script);
+              });
+          }
+
+          // 向模态框按钮组添加“保存图片”按钮
+          function addSaveImageButton() {
+              const modalButtons = document.querySelector('.modal-buttons');
+              if (!modalButtons) return;
+              // 避免重复添加
+              if (document.querySelector('.save-image-button')) return;
+
+              const saveImageBtn = document.createElement('button');
+              saveImageBtn.className = 'modal-button save-image-button';
+              saveImageBtn.textContent = 'Save Image';
+              // 保持与原有按钮一致的样式，用橙色区分
+              saveImageBtn.style.backgroundColor = '#FF9800';
+              saveImageBtn.style.color = 'white';
+              saveImageBtn.style.flex = '1';
+              saveImageBtn.style.padding = '12px 20px';
+              saveImageBtn.style.borderRadius = '10px';
+              saveImageBtn.style.border = 'none';
+              saveImageBtn.style.fontWeight = '600';
+              saveImageBtn.style.fontFamily = 'Impact';
+              saveImageBtn.style.cursor = 'pointer';
+              saveImageBtn.style.transition = 'all 0.3s ease';
+
+              saveImageBtn.addEventListener('click', async function() {
+                  // 第一步：关闭模态面板 (使用原有的 ModalManager 方法)
+                  ModalManager.hideModal();
+
+                  // 稍微延迟确保模态关闭且界面重绘完成
+                  await new Promise(resolve => setTimeout(resolve, 150));
+
+                  try {
+                      // 确保 html2canvas 已可用
+                      await loadHtml2Canvas();
+
+                      // 捕获整个页面（此时模态已隐藏，只显示主内容）
+                      const canvas = await html2canvas(document.body, {
+                          scale: 2,
+                          backgroundColor: '#000000',
+                          logging: false,
+                          allowTaint: false,
+                          useCORS: true
+                      });
+
+                      // 将 canvas 转换为 Blob
+                      canvas.toBlob(async (blob) => {
+                          const file = new File([blob], 'Mist.png', { type: 'image/png' });
+
+                          // 优先使用 Web Share API (支持分享到“存储图像”)
+                          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                              try {
+                                  await navigator.share({
+                                      files: [file],
+                                      title: 'Mist',
+                                      text: 'Mist Image'
+                                  });
+                                  return; // 分享成功 (用户可能选择存储)
+                              } catch (shareErr) {
+                                  console.log('分享取消或失败，使用备用下载', shareErr);
+                              }
+                          }
+
+                          // 备用方案：创建下载链接 (移动端可长按保存)
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = 'Mist.png';
+                          document.body.appendChild(a);
+                          a.click();
+                          document.body.removeChild(a);
+                          setTimeout(() => URL.revokeObjectURL(url), 100);
+
+                          // 简单提示（尤其是 iOS 旧设备）
+                          alert('如果图片未自动保存，请长按图片并选择“存储图像”');
+                      }, 'image/png');
+                  } catch (err) {
+                      console.error('截图保存失败:', err);
+                      alert('保存图片失败，请稍后重试');
+                  }
+              });
+
+              modalButtons.appendChild(saveImageBtn);
+          }
+
+          // 等待 DOM 就绪后添加按钮
+          if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', addSaveImageButton);
+          } else {
+              addSaveImageButton();
+          }
+      })();
+      // ===== 结束新增功能 =====
   </script>
 </body>
 </html>
