@@ -960,18 +960,15 @@
                   }
               } catch (error) {
                   console.error("hg]OX[QeQ:", error);
-                  // Clear invalid credential data if parsing fails
                   this.clearInvalidCredential();
               }
           },
 
-          // New: Clear invalid saved credential
           clearInvalidCredential: function() {
               localStorage.removeItem('webauthn_credential_id');
               AppState.credentialId = null;
           },
 
-          // New: Reset auth button state after error
           resetAuthButtonState: function() {
               DOM.authButton.disabled = false;
               DOM.authButton.classList.remove('auth-button-loading');
@@ -989,13 +986,8 @@
                   }
               } catch (error) {
                   console.error("Auth error:", error);
-                  
-                  // If authentication fails, clear invalid credential and reset
                   this.clearInvalidCredential();
                   this.resetAuthButtonState();
-
-                  // Optional: Show a friendly alert to the user
-                  alert("Failed to verify. Please tap the button again to register a new Face ID passkey.");
               }
           },
           
