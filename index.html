@@ -754,8 +754,8 @@
           </div>
           
           <div class="modal-buttons">
-              <button class="modal-button save" id="saveButton">Save</button>
               <button class="modal-button cancel" id="cancelButton">Cancel</button>
+              <button class="modal-button save" id="saveButton">Save</button>
           </div>
       </div>
   </div>
@@ -935,7 +935,7 @@
           }
       };
       
-      // 100% Original Auth Manager (Unchanged from your working HTTPS code)
+      // 100% Original Full Auth Manager (Restored & Complete)
       const AuthManager = {
           init: function() {
               if (!window.PublicKeyCredential) {
@@ -1025,4 +1025,77 @@
           },
           
           authenticateWithCredential: async function() {
-              const challenge
+              const challenge = new Uint8Array(32);
+              crypto.getRandomValues(challenge);
+              
+              const publicKey = {
+                  challenge: challenge,
+                  rpId: window.location.hostname,
+                  allowCredentials: [
+                      {
+                          type: "public-key",
+                          id: AppState.credentialId,
+                          transports: ["internal"]
+                      }
+                  ],
+                  userVerification: "required",
+                  timeout: CONFIG.webauthn.timeout
+              };
+              
+              const assertion = await navigator.credentials.get({ publicKey });
+              
+              if (assertion) {
+                  this.onAuthenticationSuccess();
+              } else {
+                  throw new Error("1Y%");
+              }
+          },
+          
+          onAuthenticationSuccess: function() {
+              AppState.isAuthenticated = true;
+              UI.showContent();
+          }
+      };
+      
+      // 100% Original UI Logic (Unchanged)
+      const UI = {
+          showContent: function() {
+              DOM.authContainer.style.opacity = "0";
+              
+              setTimeout(() => {
+                  DOM.authContainer.style.display = "none";
+                  DOM.contentContainer.style.display = "block";
+                  DOM.contentContainer.offsetHeight;
+                  
+                  setTimeout(() => {
+                      DOM.contentContainer.classList.add('active');
+                      ModalManager.ensureImageCover();
+                  }, 50);
+              }, 300);
+          }
+      };
+      
+      // Full App Init
+      function initApp() {
+          AuthManager.init();
+          ModalManager.init();
+      }
+      
+      if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+          initApp();
+      }
+      
+      // Original Scroll Prevention
+      window.addEventListener('scroll', preventScroll, { passive: false });
+      window.addEventListener('touchmove', preventScroll, { passive: false });
+      
+      function preventScroll(e) {
+          e.preventDefault();
+          window.scrollTo(0, 0);
+          return false;
+      }
+  </script>
+</body>
+</html>
