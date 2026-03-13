@@ -52,7 +52,6 @@
           --safe-area-inset-left: env(safe-area-inset-left, 0px);
           --safe-area-inset-right: env(safe-area-inset-right, 0px);
       }
-      /* --- Original Auth Container & Button Styles (100% Unchanged) --- */
       #auth-container {
           position: fixed;
           top: 0;
@@ -149,7 +148,6 @@
           width: 100%;
           text-align: center;
       }
-      /* --- Content Container with Fixed Centering --- */
       #content-container {
           display: none;
           position: fixed;
@@ -162,14 +160,15 @@
           opacity: 0;
           transition: opacity 0.3s ease;
           overflow: hidden;
-          padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+          padding-top: var(--safe-area-inset-top);
+          padding-bottom: var(--safe-area-inset-bottom);
+          padding-left: var(--safe-area-inset-left);
+          padding-right: var(--safe-area-inset-right);
           box-sizing: border-box;
-          justify-content: center;
-          align-items: center;
       }
       #content-container.active {
           opacity: 1;
-          display: flex;
+          display: block;
       }
       .blur-background {
           position: fixed;
@@ -236,6 +235,10 @@
               );
       }
       .main-content {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, calc(-50% + 20px));
           width: 90%;
           max-width: 700px;
           text-align: center;
@@ -248,10 +251,8 @@
           overflow: hidden;
           background-color: transparent;
           z-index: 4;
-          max-height: calc(100% - 40px);
+          max-height: calc(100% - var(--safe-area-inset-top) - var(--safe-area-inset-bottom) - 40px);
           box-sizing: border-box;
-          flex-shrink: 0;
-          transform: translateY(20px);
       }
       .content-layer {
           position: relative;
@@ -645,13 +646,17 @@
           }
           
           .main-content {
-              max-height: calc(100% - 40px);
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, calc(-50% + 20px));
+              max-height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px);
           }
       }
       @media (max-width: 375px) and (max-height: 667px) {
           .main-content {
               padding: 15px 20px;
-              transform: translateY(12px);
+              transform: translate(-50%, calc(-50% + 12px));
           }
           
           .content-image {
@@ -689,7 +694,6 @@
   </style>
 </head>
 <body class="no-scroll">
-  <!-- Original Auth HTML (100% Unchanged) -->
   <div id="auth-container">
       <div class="auth-button-container">
           <button class="auth-button" id="authButton">
@@ -751,7 +755,6 @@
       </div>
   </div>
   <script>
-      // Original CONFIG (100% Unchanged, Face ID Parameters Restored)
       const CONFIG = {
           webauthn: {
               rpName: "Mist",
@@ -795,7 +798,6 @@
           safeAreaGradient: document.querySelector('.safe-area-gradient')
       };
       
-      // Original Modal Manager (100% Unchanged)
       const ModalManager = {
           init: function() {
               DOM.textEditTrigger.addEventListener('click', () => this.showModal());
@@ -926,7 +928,6 @@
           }
       };
       
-      // Original Auth Manager (100% Unchanged, Full Face ID Logic Restored)
       const AuthManager = {
           init: function() {
               if (!window.PublicKeyCredential) {
@@ -1048,14 +1049,13 @@
           }
       };
       
-      // UI Logic (Only display adjusted for flex layout, auth flow is 100% original)
       const UI = {
           showContent: function() {
               DOM.authContainer.style.opacity = "0";
               
               setTimeout(() => {
                   DOM.authContainer.style.display = "none";
-                  DOM.contentContainer.style.display = "flex";
+                  DOM.contentContainer.style.display = "block";
                   DOM.contentContainer.offsetHeight;
                   
                   setTimeout(() => {
