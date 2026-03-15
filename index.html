@@ -62,89 +62,13 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 锁屏认证层 */
-        #lock-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background-color: var(--system-background);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            padding: 24px;
-        }
-
-        .lock-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, var(--primary-accent), #5856d6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-
-        .lock-icon svg {
-            width: 40px;
-            height: 40px;
-            stroke: white;
-            stroke-width: 2;
-            fill: none;
-        }
-
-        .lock-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-align: center;
-        }
-
-        .lock-desc {
-            font-size: 17px;
-            color: var(--secondary-text);
-            margin-bottom: 48px;
-            text-align: center;
-            max-width: 300px;
-        }
-
-        .auth-button {
-            background-color: var(--primary-accent);
-            color: white;
-            border: none;
-            border-radius: var(--corner-radius-medium);
-            padding: 16px 32px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-light);
-        }
-
-        .auth-button:active {
-            transform: scale(0.96);
-            opacity: 0.8;
-        }
-
-        .auth-button.secondary {
-            background-color: var(--secondary-background);
-            color: var(--primary-accent);
-            margin-top: 16px;
-        }
-
         /* 主应用容器 */
         #app-container {
             height: 100vh;
             height: 100dvh;
             display: flex;
             flex-direction: column;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            opacity: 1;
         }
 
         /* 顶部导航栏 */
@@ -615,20 +539,6 @@
     </style>
 </head>
 <body>
-    <!-- 锁屏认证层 -->
-    <div id="lock-screen">
-        <div class="lock-icon">
-            <svg viewBox="0 0 24 24">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-        </div>
-        <h1 class="lock-title">需要Face ID认证</h1>
-        <p class="lock-desc">请通过Face ID验证身份，以访问AI聊天功能</p>
-        <button id="auth-unlock-button" class="auth-button">通过Face ID解锁</button>
-        <button id="auth-register-button" class="auth-button secondary hidden">注册Face ID</button>
-    </div>
-
     <!-- 主应用容器 -->
     <div id="app-container">
         <!-- 顶部导航栏 -->
@@ -707,19 +617,14 @@
     <script>
         // 常量定义
         const STORAGE_KEYS = {
-            AUTH_CREDENTIAL: 'ios26_faceid_credential',
             AI_CONFIG: 'ios26_ai_config'
         };
-        let isAuthenticated = false;
         let aiConfig = {};
         let messageList = [];
         let isGenerating = false;
 
         // DOM 元素获取
         const elements = {
-            lockScreen: document.getElementById('lock-screen'),
-            authUnlockButton: document.getElementById('auth-unlock-button'),
-            authRegisterButton: document.getElementById('auth-register-button'),
             appContainer: document.getElementById('app-container'),
             chatMessages: document.getElementById('chat-messages'),
             messageInput: document.getElementById('message-input'),
@@ -738,28 +643,6 @@
 
         // 工具函数
         const utils = {
-            // Base64URL 与 ArrayBuffer 转换（WebAuthn 必需）
-            base64urlToArrayBuffer(base64url) {
-                const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
-                const padLength = (4 - (base64.length % 4)) % 4;
-                const padded = base64.padEnd(base64.length + padLength, '=');
-                const binary = atob(padded);
-                const buffer = new ArrayBuffer(binary.length);
-                const view = new Uint8Array(buffer);
-                for (let i = 0; i < binary.length; i++) {
-                    view[i] = binary.charCodeAt(i);
-                }
-                return buffer;
-            },
-            arrayBufferToBase64url(buffer) {
-                const bytes = new Uint8Array(buffer);
-                let binary = '';
-                for (let i = 0; i < bytes.byteLength; i++) {
-                    binary += String.fromCharCode(bytes[i]);
-                }
-                const base64 = btoa(binary);
-                return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-            },
             // Toast 提示
             showToast(message, duration = 2000) {
                 elements.toast.textContent = message;
@@ -786,11 +669,8 @@
             // 接口地址格式化（核心容错：自动修正用户填错的地址）
             formatApiBaseUrl(url) {
                 if (!url) return '';
-                // 去掉首尾空格
                 let formatted = url.trim();
-                // 去掉结尾的/chat/completions（用户最容易填错的点）
                 formatted = formatted.replace(/\/chat\/completions\/?$/, '');
-                // 去掉结尾多余的斜杠，避免出现//的情况
                 formatted = formatted.replace(/\/+$/, '');
                 return formatted;
             },
@@ -802,24 +682,20 @@
                     status: null
                 };
 
-                // 网络错误
                 if (error.name === 'TypeError' && error.message.includes('fetch')) {
                     errorInfo.message = '网络请求失败';
                     errorInfo.details = '可能是CORS跨域限制、网络不通、接口地址错误，请检查接口地址和Worker跨域配置';
                     return errorInfo;
                 }
 
-                // HTTP状态码错误
                 if (response) {
                     errorInfo.status = response.status;
                     errorInfo.message = `请求失败，状态码：${response.status}`;
                     
                     try {
-                        // 先尝试解析JSON错误
                         const errorData = await response.json();
                         errorInfo.details = errorData.error?.message || JSON.stringify(errorData);
                     } catch (e) {
-                        // 解析失败就读取文本
                         try {
                             const textError = await response.text();
                             errorInfo.details = textError || '接口返回了非标准错误内容';
@@ -828,7 +704,6 @@
                         }
                     }
 
-                    // 针对常见状态码给提示
                     if (response.status === 401) {
                         errorInfo.message = 'API密钥无效或无权限';
                         errorInfo.details += '\n请检查API Key是否正确，是否开通了Workers AI权限';
@@ -843,126 +718,11 @@
                         errorInfo.details += '\nCloudflare服务异常，或你的Worker代码有错误';
                     }
                 } else {
-                    // 其他错误
                     errorInfo.message = error.message || '未知错误';
                     errorInfo.details = error.stack || '无详细错误信息';
                 }
 
                 return errorInfo;
-            }
-        };
-
-        // Face ID 认证相关逻辑
-        const faceIdAuth = {
-            // 检查是否已注册凭证
-            getStoredCredential() {
-                try {
-                    const stored = localStorage.getItem(STORAGE_KEYS.AUTH_CREDENTIAL);
-                    return stored ? JSON.parse(stored) : null;
-                } catch (e) {
-                    console.error('获取凭证失败', e);
-                    return null;
-                }
-            },
-            // 注册Face ID凭证
-            async register() {
-                try {
-                    const challenge = crypto.getRandomValues(new Uint8Array(32));
-                    const userId = crypto.getRandomValues(new Uint8Array(16));
-
-                    const publicKeyOptions = {
-                        challenge: challenge,
-                        rp: {
-                            name: 'iOS26 AI Chat',
-                            id: window.location.hostname
-                        },
-                        user: {
-                            id: userId,
-                            name: 'User',
-                            displayName: 'iOS26 User'
-                        },
-                        pubKeyCredParams: [
-                            { type: 'public-key', alg: -7 },
-                            { type: 'public-key', alg: -257 }
-                        ],
-                        authenticatorSelection: {
-                            authenticatorAttachment: 'platform',
-                            userVerification: 'required',
-                            requireResidentKey: false
-                        },
-                        timeout: 60000,
-                        attestation: 'none'
-                    };
-
-                    const credential = await navigator.credentials.create({
-                        publicKey: publicKeyOptions
-                    });
-
-                    // 存储凭证信息
-                    const credentialData = {
-                        id: credential.id,
-                        rawId: utils.arrayBufferToBase64url(credential.rawId),
-                        type: credential.type,
-                        transports: credential.response.getTransports?.() || []
-                    };
-
-                    localStorage.setItem(STORAGE_KEYS.AUTH_CREDENTIAL, JSON.stringify(credentialData));
-                    utils.showToast('Face ID 注册成功');
-                    return true;
-
-                } catch (error) {
-                    console.error('Face ID 注册失败', error);
-                    const errorInfo = await utils.getDetailedError(error);
-                    alert(`Face ID 注册失败：\n${errorInfo.message}\n${errorInfo.details}`);
-                    return false;
-                }
-            },
-            // 验证Face ID
-            async authenticate() {
-                const storedCredential = this.getStoredCredential();
-                if (!storedCredential) {
-                    alert('未找到Face ID凭证，请先注册');
-                    return false;
-                }
-
-                try {
-                    const challenge = crypto.getRandomValues(new Uint8Array(32));
-                    const publicKeyOptions = {
-                        challenge: challenge,
-                        allowCredentials: [
-                            {
-                                type: 'public-key',
-                                id: utils.base64urlToArrayBuffer(storedCredential.rawId),
-                                transports: storedCredential.transports
-                            }
-                        ],
-                        userVerification: 'required',
-                        timeout: 60000
-                    };
-
-                    const assertion = await navigator.credentials.get({
-                        publicKey: publicKeyOptions
-                    });
-
-                    return !!assertion;
-
-                } catch (error) {
-                    console.error('Face ID 认证失败', error);
-                    const errorInfo = await utils.getDetailedError(error);
-                    alert(`Face ID 认证失败：\n${errorInfo.message}\n${errorInfo.details}`);
-                    return false;
-                }
-            },
-            // 初始化认证状态
-            initAuthState() {
-                const hasCredential = !!this.getStoredCredential();
-                if (hasCredential) {
-                    elements.authUnlockButton.classList.remove('hidden');
-                    elements.authRegisterButton.classList.add('hidden');
-                } else {
-                    elements.authUnlockButton.classList.add('hidden');
-                    elements.authRegisterButton.classList.remove('hidden');
-                }
             }
         };
 
@@ -1005,7 +765,6 @@
                     return false;
                 }
 
-                // 校验HTTPS
                 if (!apiBase.startsWith('https://')) {
                     alert('接口地址错误：必须使用HTTPS协议，http地址无法使用');
                     return false;
@@ -1045,7 +804,6 @@
                 elements.settingsTestButton.textContent = '测试中...';
 
                 try {
-                    // 用简单的测试请求验证配置
                     const testRequestBody = {
                         model: modelId,
                         messages: [{ role: 'user', content: 'hi' }],
@@ -1068,14 +826,12 @@
                         throw new Error(`${errorInfo.message}\n详细信息：${errorInfo.details}`);
                     }
 
-                    // 解析响应，确认格式正确
                     const data = await response.json();
                     if (!data.choices || !data.choices[0]) {
                         throw new Error('接口返回格式不符合OpenAI规范，无法正常使用');
                     }
 
                     alert('✅ 配置测试成功！接口、密钥、模型均正常可用，可以开始聊天了');
-                    // 测试成功自动保存配置
                     this.saveConfig();
 
                 } catch (error) {
@@ -1095,7 +851,6 @@
                 const { role, content } = message;
                 const isUser = role === 'user';
 
-                // 清空空状态
                 if (messageList.length <= 1) {
                     elements.chatMessages.innerHTML = '';
                 }
@@ -1122,7 +877,6 @@
                 messageWrapper.innerHTML = headerHtml + contentHtml;
                 elements.chatMessages.appendChild(messageWrapper);
 
-                // 如果是AI消息且是新消息，返回气泡元素用于流式更新
                 if (!isUser && isNew) {
                     return messageWrapper.querySelector('.message-bubble');
                 }
@@ -1150,12 +904,10 @@
                     return;
                 }
 
-                // 清空输入框
                 elements.messageInput.value = '';
                 utils.autoResizeTextarea();
                 elements.sendButton.disabled = true;
 
-                // 添加用户消息
                 const userMessage = {
                     id: Date.now().toString(),
                     role: 'user',
@@ -1164,16 +916,13 @@
                 messageList.push(userMessage);
                 this.renderMessage(userMessage);
 
-                // 生成AI消息ID
                 const aiMessageId = (Date.now() + 1).toString();
                 let aiMessageContent = '';
                 let aiBubbleElement = null;
 
-                // 标记生成中
                 isGenerating = true;
 
                 try {
-                    // 构造请求体
                     const requestBody = {
                         model: aiConfig.modelId,
                         messages: messageList.map(msg => ({ role: msg.role, content: msg.content })),
@@ -1181,7 +930,6 @@
                         temperature: 0.7
                     };
 
-                    // 发起请求
                     const response = await fetch(`${aiConfig.apiBase}/chat/completions`, {
                         method: 'POST',
                         headers: {
@@ -1196,7 +944,6 @@
                         throw new Error(`${errorInfo.message}\n${errorInfo.details}`);
                     }
 
-                    // 先渲染AI消息占位
                     const aiMessage = {
                         id: aiMessageId,
                         role: 'assistant',
@@ -1206,7 +953,6 @@
                     aiBubbleElement = this.renderMessage(aiMessage, true);
                     aiBubbleElement.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
 
-                    // 处理流式响应，优化解析逻辑
                     const reader = response.body.getReader();
                     const decoder = new TextDecoder('utf-8');
                     let buffer = '';
@@ -1217,17 +963,13 @@
 
                         buffer += decoder.decode(value, { stream: true });
                         const lines = buffer.split('\n');
-                        // 保留最后不完整的一行，下次继续处理
                         buffer = lines.pop() || '';
 
                         for (const line of lines) {
                             const trimmedLine = line.trim();
-                            // 跳过空行和非data开头的行
                             if (!trimmedLine || !trimmedLine.startsWith('data: ')) continue;
-                            // 处理结束标记
                             if (trimmedLine === 'data: [DONE]') continue;
                             
-                            // 解析JSON
                             try {
                                 const jsonData = JSON.parse(trimmedLine.slice(5));
                                 const delta = jsonData.choices?.[0]?.delta?.content;
@@ -1243,15 +985,9 @@
                         }
                     }
 
-                    // 更新最终消息内容
                     const finalAiMessage = messageList.find(msg => msg.id === aiMessageId);
                     if (finalAiMessage) {
                         finalAiMessage.content = aiMessageContent;
-                    }
-
-                    // 处理buffer里剩余的内容（防止最后一行没解析）
-                    if (buffer.trim()) {
-                        console.warn('流式响应剩余未解析内容', buffer);
                     }
 
                 } catch (error) {
@@ -1259,11 +995,9 @@
                     const errorFullMessage = error.message || '未知错误';
                     utils.showToast('请求失败，查看详细错误信息');
                     
-                    // 处理错误状态
                     if (aiBubbleElement) {
                         aiBubbleElement.innerHTML = `❌ 请求失败\n${errorFullMessage}`;
                     } else {
-                        // 如果还没渲染气泡，添加错误消息
                         const errorMessage = {
                             id: aiMessageId,
                             role: 'assistant',
@@ -1277,33 +1011,10 @@
                     isGenerating = false;
                     elements.sendButton.disabled = elements.messageInput.value.trim() === '';
                 }
-            },
-            // 清空聊天记录
-            clearChat() {
-                messageList = [];
-                this.renderEmptyState();
-                utils.showToast('聊天记录已清空');
             }
         };
 
         // 界面控制函数
-        function unlockApp() {
-            isAuthenticated = true;
-            elements.lockScreen.classList.add('hidden');
-            setTimeout(() => {
-                elements.lockScreen.classList.add('removed');
-            }, 400);
-            elements.appContainer.style.opacity = '1';
-
-            // 检查配置
-            if (!aiConfigManager.isConfigValid()) {
-                setTimeout(() => {
-                    utils.showToast('请先配置API信息', 3000);
-                    openSettings();
-                }, 500);
-            }
-        }
-
         function openSettings() {
             elements.settingsPanel.style.display = 'flex';
             aiConfigManager.fillConfigToForm();
@@ -1315,22 +1026,6 @@
 
         // 事件监听
         function initEventListeners() {
-            // 认证相关事件
-            elements.authRegisterButton.addEventListener('click', async () => {
-                const success = await faceIdAuth.register();
-                if (success) {
-                    faceIdAuth.initAuthState();
-                    unlockApp();
-                }
-            });
-
-            elements.authUnlockButton.addEventListener('click', async () => {
-                const success = await faceIdAuth.authenticate();
-                if (success) {
-                    unlockApp();
-                }
-            });
-
             // 输入框相关事件
             elements.messageInput.addEventListener('input', () => {
                 utils.autoResizeTextarea();
@@ -1367,3 +1062,31 @@
             elements.settingsSaveButton.addEventListener('click', () => {
                 const success = aiConfigManager.saveConfig();
                 if (success) {
+                    closeSettings();
+                }
+            });
+
+            elements.settingsResetButton.addEventListener('click', aiConfigManager.resetConfig);
+            elements.settingsTestButton.addEventListener('click', aiConfigManager.testConfig);
+        }
+
+        // 初始化函数
+        function init() {
+            aiConfigManager.loadConfig();
+            initEventListeners();
+            chatManager.renderEmptyState();
+            
+            // 首次打开无配置，自动打开设置面板
+            if (!aiConfigManager.isConfigValid()) {
+                setTimeout(() => {
+                    utils.showToast('请先配置API信息', 3000);
+                    openSettings();
+                }, 500);
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
