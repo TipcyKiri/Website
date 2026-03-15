@@ -462,13 +462,20 @@
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .form-label {
             font-size: 15px;
             font-weight: 500;
             color: var(--secondary-text);
+        }
+
+        .form-desc {
+            font-size: 13px;
+            color: var(--tertiary-text);
+            margin-top: -4px;
+            line-height: 1.4;
         }
 
         .form-input {
@@ -488,30 +495,28 @@
             border-color: var(--primary-accent);
         }
 
-        .form-tip {
-            font-size: 13px;
-            color: var(--tertiary-text);
-            line-height: 1.4;
-        }
-
         .settings-footer {
             padding: 16px;
             border-top: 1px solid var(--separator-color);
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            flex-direction: column;
+            gap: 12px;
             position: sticky;
             bottom: 0;
             background: var(--secondary-background);
             z-index: 10;
         }
 
+        .footer-button-row {
+            display: flex;
+            gap: 12px;
+        }
+
         .settings-button {
             flex: 1;
-            min-width: 100px;
-            padding: 14px 8px;
+            padding: 14px;
             border-radius: var(--corner-radius-medium);
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
             border: none;
             cursor: pointer;
@@ -528,9 +533,10 @@
             color: var(--primary-text);
         }
 
-        .settings-button.success {
+        .settings-button.test {
             background-color: var(--secondary-accent);
             color: white;
+            width: 100%;
         }
 
         .settings-button:active {
@@ -671,24 +677,26 @@
             <div class="settings-content">
                 <div class="form-group">
                     <label class="form-label">接口地址 (HTTPS)</label>
-                    <input type="url" id="api-base-input" class="form-input" placeholder="https://xxx.workers.dev/v1" required>
-                    <p class="form-tip">示例：https://gateway.ai.cloudflare.com/v1/你的账户ID/网关名/openai</p>
+                    <input type="url" id="api-base-input" class="form-input" placeholder="https://gateway.ai.cloudflare.com/v1/账户ID/网关名/openai" required>
+                    <p class="form-desc">示例：https://xxx.workers.dev/v1 ，不要加结尾的/chat/completions</p>
                 </div>
                 <div class="form-group">
                     <label class="form-label">API Key</label>
-                    <input type="password" id="api-key-input" class="form-input" placeholder="你的Cloudflare Workers AI令牌" required>
-                    <p class="form-tip">请使用「Workers AI 编辑」模板生成的专属令牌，不要用全局API Key</p>
+                    <input type="password" id="api-key-input" class="form-input" placeholder="Cloudflare Workers AI 令牌" required>
+                    <p class="form-desc">请使用Cloudflare生成的Workers AI专属令牌，不要用全局密钥</p>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Model ID</label>
                     <input type="text" id="model-id-input" class="form-input" placeholder="@cf/meta/llama-3.1-8b-instruct" required>
-                    <p class="form-tip">示例：@cf/meta/llama-3.1-8b-instruct、@cf/qwen/qwen1.5-14b-chat-awq</p>
+                    <p class="form-desc">示例：@cf/qwen/qwen1.5-14b-chat-awq ，必须是Cloudflare支持的模型ID</p>
                 </div>
             </div>
             <div class="settings-footer">
-                <button id="settings-reset-button" class="settings-button secondary">重置</button>
-                <button id="settings-test-button" class="settings-button secondary">测试配置</button>
-                <button id="settings-save-button" class="settings-button primary">保存配置</button>
+                <button id="settings-test-button" class="settings-button test">测试配置是否可用</button>
+                <div class="footer-button-row">
+                    <button id="settings-reset-button" class="settings-button secondary">重置</button>
+                    <button id="settings-save-button" class="settings-button primary">保存配置</button>
+                </div>
             </div>
         </div>
     </div>
@@ -775,35 +783,72 @@
                 div.textContent = text;
                 return div.innerHTML;
             },
-            // 智能修正接口地址
-            fixApiBaseUrl(url) {
+            // 接口地址格式化（核心容错：自动修正用户填错的地址）
+            formatApiBaseUrl(url) {
                 if (!url) return '';
-                // 去掉末尾多余的斜杠
-                let fixedUrl = url.trim().replace(/\/+$/, '');
-                // 去掉用户误加的/chat/completions结尾
-                fixedUrl = fixedUrl.replace(/\/chat\/completions$/, '');
-                return fixedUrl;
+                // 去掉首尾空格
+                let formatted = url.trim();
+                // 去掉结尾的/chat/completions（用户最容易填错的点）
+                formatted = formatted.replace(/\/chat\/completions\/?$/, '');
+                // 去掉结尾多余的斜杠，避免出现//的情况
+                formatted = formatted.replace(/\/+$/, '');
+                return formatted;
             },
-            // 格式化错误详情，给用户看明白
-            formatErrorDetail(error, response) {
-                let detail = '';
-                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                    detail = '【错误类型】网络连接失败/CORS跨域拦截\n\n【解决方法】\n1. 请确认接口地址能正常访问\n2. 推荐使用Cloudflare官方AI网关，自动解决跨域问题\n3. 检查手机网络，关闭VPN/代理';
-                } else if (response) {
-                    detail += `【HTTP状态码】${response.status} ${response.statusText}\n\n`;
+            // 提取详细错误信息
+            async getDetailedError(error, response) {
+                let errorInfo = {
+                    message: '未知错误',
+                    details: '',
+                    status: null
+                };
+
+                // 网络错误
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    errorInfo.message = '网络请求失败';
+                    errorInfo.details = '可能是CORS跨域限制、网络不通、接口地址错误，请检查接口地址和Worker跨域配置';
+                    return errorInfo;
+                }
+
+                // HTTP状态码错误
+                if (response) {
+                    errorInfo.status = response.status;
+                    errorInfo.message = `请求失败，状态码：${response.status}`;
+                    
+                    try {
+                        // 先尝试解析JSON错误
+                        const errorData = await response.json();
+                        errorInfo.details = errorData.error?.message || JSON.stringify(errorData);
+                    } catch (e) {
+                        // 解析失败就读取文本
+                        try {
+                            const textError = await response.text();
+                            errorInfo.details = textError || '接口返回了非标准错误内容';
+                        } catch (e2) {
+                            errorInfo.details = '无法读取接口返回的错误信息';
+                        }
+                    }
+
+                    // 针对常见状态码给提示
                     if (response.status === 401) {
-                        detail += '【错误原因】API Key无效/权限不足\n\n【解决方法】\n1. 请使用「Workers AI 编辑」模板生成专属令牌\n2. 确认令牌没有过期，账户权限正常\n3. 检查API Key前后没有多余空格';
+                        errorInfo.message = 'API密钥无效或无权限';
+                        errorInfo.details += '\n请检查API Key是否正确，是否开通了Workers AI权限';
                     } else if (response.status === 404) {
-                        detail += '【错误原因】接口地址不存在/模型ID错误\n\n【解决方法】\n1. 核对接口地址格式是否正确，不要填错路径\n2. 确认模型ID是Cloudflare官方支持的模型\n3. 检查接口地址是否能正常访问';
+                        errorInfo.message = '接口地址不存在';
+                        errorInfo.details += '\n请检查接口地址是否正确，是否填错了路径';
                     } else if (response.status === 429) {
-                        detail += '【错误原因】请求频率超限/免费额度用完\n\n【解决方法】\n1. Cloudflare免费计划有每日额度限制，请等待额度恢复\n2. 降低发送消息的频率';
+                        errorInfo.message = '请求频率超限或额度用完';
+                        errorInfo.details += '\n请检查Cloudflare Workers AI免费额度是否用完';
                     } else if (response.status >= 500) {
-                        detail += '【错误原因】服务器内部错误\n\n【解决方法】\n1. 确认Cloudflare服务正常\n2. 检查你的Worker代码是否有报错\n3. 稍后再试';
+                        errorInfo.message = '服务器内部错误';
+                        errorInfo.details += '\nCloudflare服务异常，或你的Worker代码有错误';
                     }
                 } else {
-                    detail += `【错误信息】${error.message || error}\n\n`;
+                    // 其他错误
+                    errorInfo.message = error.message || '未知错误';
+                    errorInfo.details = error.stack || '无详细错误信息';
                 }
-                return detail;
+
+                return errorInfo;
             }
         };
 
@@ -867,7 +912,8 @@
 
                 } catch (error) {
                     console.error('Face ID 注册失败', error);
-                    alert(`Face ID 注册失败\n\n原因：${error.message || '请重试，确保在HTTPS环境下使用'}`);
+                    const errorInfo = await utils.getDetailedError(error);
+                    alert(`Face ID 注册失败：\n${errorInfo.message}\n${errorInfo.details}`);
                     return false;
                 }
             },
@@ -902,7 +948,8 @@
 
                 } catch (error) {
                     console.error('Face ID 认证失败', error);
-                    alert(`Face ID 认证失败\n\n原因：${error.message || '请重试'}`);
+                    const errorInfo = await utils.getDetailedError(error);
+                    alert(`Face ID 认证失败：\n${errorInfo.message}\n${errorInfo.details}`);
                     return false;
                 }
             },
@@ -942,16 +989,16 @@
                 elements.apiKeyInput.value = aiConfig.apiKey || '';
                 elements.modelIdInput.value = aiConfig.modelId || '';
             },
-            // 从表单获取并修正配置
-            getConfigFromForm() {
-                const apiBase = utils.fixApiBaseUrl(elements.apiBaseInput.value);
+            // 从表单获取并格式化配置
+            getFormattedConfig() {
+                const apiBase = utils.formatApiBaseUrl(elements.apiBaseInput.value);
                 const apiKey = elements.apiKeyInput.value.trim();
                 const modelId = elements.modelIdInput.value.trim();
                 return { apiBase, apiKey, modelId };
             },
             // 保存配置
             saveConfig() {
-                const { apiBase, apiKey, modelId } = this.getConfigFromForm();
+                const { apiBase, apiKey, modelId } = this.getFormattedConfig();
 
                 if (!apiBase || !apiKey || !modelId) {
                     utils.showToast('请填写完整的配置信息');
@@ -960,7 +1007,7 @@
 
                 // 校验HTTPS
                 if (!apiBase.startsWith('https://')) {
-                    alert('配置错误\n\n接口地址必须使用HTTPS协议，http://地址无法使用');
+                    alert('接口地址错误：必须使用HTTPS协议，http地址无法使用');
                     return false;
                 }
 
@@ -974,6 +1021,7 @@
                 elements.apiBaseInput.value = '';
                 elements.apiKeyInput.value = '';
                 elements.modelIdInput.value = '';
+                utils.showToast('配置已重置');
             },
             // 检查配置是否有效
             isConfigValid() {
@@ -981,29 +1029,28 @@
             },
             // 测试配置是否可用
             async testConfig() {
-                const { apiBase, apiKey, modelId } = this.getConfigFromForm();
+                const { apiBase, apiKey, modelId } = this.getFormattedConfig();
                 
-                // 先校验必填项
                 if (!apiBase || !apiKey || !modelId) {
-                    alert('测试失败\n\n请先填写完整的接口地址、API Key、Model ID');
-                    return;
-                }
-                if (!apiBase.startsWith('https://')) {
-                    alert('测试失败\n\n接口地址必须使用HTTPS协议');
+                    alert('请先填写完整的配置信息，再进行测试');
                     return;
                 }
 
-                // 更改按钮状态
+                if (!apiBase.startsWith('https://')) {
+                    alert('接口地址错误：必须使用HTTPS协议');
+                    return;
+                }
+
                 elements.settingsTestButton.disabled = true;
                 elements.settingsTestButton.textContent = '测试中...';
 
                 try {
-                    // 发送测试请求
+                    // 用简单的测试请求验证配置
                     const testRequestBody = {
                         model: modelId,
                         messages: [{ role: 'user', content: 'hi' }],
                         stream: false,
-                        max_tokens: 50
+                        max_tokens: 10
                     };
 
                     const response = await fetch(`${apiBase}/chat/completions`, {
@@ -1012,50 +1059,31 @@
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${apiKey}`
                         },
-                        body: JSON.stringify(testRequestBody)
+                        body: JSON.stringify(testRequestBody),
+                        signal: AbortSignal.timeout(15000)
                     });
 
-                    // 处理非200响应
                     if (!response.ok) {
-                        let errorDetail = '';
-                        try {
-                            const errorData = await response.json();
-                            errorDetail = `接口返回错误：${JSON.stringify(errorData, null, 2)}`;
-                        } catch (e) {
-                            errorDetail = `接口返回内容：${await response.text()}`;
-                        }
-                        const formatError = utils.formatErrorDetail(new Error('配置测试失败'), response);
-                        alert(`配置测试失败\n\n${formatError}\n\n【详细返回】\n${errorDetail}`);
-                        return;
+                        const errorInfo = await utils.getDetailedError(null, response);
+                        throw new Error(`${errorInfo.message}\n详细信息：${errorInfo.details}`);
                     }
 
-                    // 解析响应
-                    const result = await response.json();
-                    if (result.choices && result.choices.length > 0) {
-                        alert('✅ 配置测试成功！\n\n接口、API Key、模型均正常，可保存配置开始使用');
-                        elements.settingsTestButton.classList.remove('secondary');
-                        elements.settingsTestButton.classList.add('success');
-                        elements.settingsTestButton.textContent = '测试成功';
-                    } else {
-                        alert('⚠️ 接口响应异常\n\n接口返回成功，但没有正常的聊天内容，请检查模型ID是否正确');
+                    // 解析响应，确认格式正确
+                    const data = await response.json();
+                    if (!data.choices || !data.choices[0]) {
+                        throw new Error('接口返回格式不符合OpenAI规范，无法正常使用');
                     }
+
+                    alert('✅ 配置测试成功！接口、密钥、模型均正常可用，可以开始聊天了');
+                    // 测试成功自动保存配置
+                    this.saveConfig();
 
                 } catch (error) {
                     console.error('配置测试失败', error);
-                    const formatError = utils.formatErrorDetail(error, null);
-                    alert(`配置测试失败\n\n${formatError}`);
+                    alert(`❌ 配置测试失败：\n${error.message}`);
                 } finally {
-                    // 恢复按钮状态
                     elements.settingsTestButton.disabled = false;
-                    if (elements.settingsTestButton.classList.contains('success')) {
-                        setTimeout(() => {
-                            elements.settingsTestButton.classList.remove('success');
-                            elements.settingsTestButton.classList.add('secondary');
-                            elements.settingsTestButton.textContent = '测试配置';
-                        }, 2000);
-                    } else {
-                        elements.settingsTestButton.textContent = '测试配置';
-                    }
+                    elements.settingsTestButton.textContent = '测试配置是否可用';
                 }
             }
         };
@@ -1126,7 +1154,6 @@
                 elements.messageInput.value = '';
                 utils.autoResizeTextarea();
                 elements.sendButton.disabled = true;
-                elements.messageInput.disabled = true;
 
                 // 添加用户消息
                 const userMessage = {
@@ -1165,22 +1192,9 @@
                     });
 
                     if (!response.ok) {
-                        // 捕获非200错误，给出详细提示
-                        let errorDetail = '';
-                        try {
-                            const errorData = await response.json();
-                            errorDetail = `接口返回错误：${JSON.stringify(errorData, null, 2)}`;
-                        } catch (e) {
-                            errorDetail = `接口返回内容：${await response.text()}`;
-                        }
-                        const formatError = utils.formatErrorDetail(new Error('请求失败'), response);
-                        throw new Error(`${formatError}\n\n【详细返回】\n${errorDetail}`);
+                        const errorInfo = await utils.getDetailedError(null, response);
+                        throw new Error(`${errorInfo.message}\n${errorInfo.details}`);
                     }
-
-                    // 处理流式响应
-                    const reader = response.body.getReader();
-                    const decoder = new TextDecoder('utf-8');
-                    let buffer = '';
 
                     // 先渲染AI消息占位
                     const aiMessage = {
@@ -1192,31 +1206,39 @@
                     aiBubbleElement = this.renderMessage(aiMessage, true);
                     aiBubbleElement.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
 
+                    // 处理流式响应，优化解析逻辑
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder('utf-8');
+                    let buffer = '';
+
                     while (true) {
                         const { done, value } = await reader.read();
                         if (done) break;
 
                         buffer += decoder.decode(value, { stream: true });
                         const lines = buffer.split('\n');
-                        buffer = lines.pop(); // 保留不完整的行
+                        // 保留最后不完整的一行，下次继续处理
+                        buffer = lines.pop() || '';
 
                         for (const line of lines) {
                             const trimmedLine = line.trim();
-                            if (!trimmedLine || trimmedLine === 'data: [DONE]') continue;
-                            if (trimmedLine.startsWith('data: ')) {
-                                try {
-                                    const jsonData = JSON.parse(trimmedLine.slice(5));
-                                    const delta = jsonData.choices?.[0]?.delta?.content;
-                                    if (delta) {
-                                        aiMessageContent += delta;
-                                        aiBubbleElement.innerHTML = utils.escapeHtml(aiMessageContent).replace(/\n/g, '<br>');
-                                        utils.scrollToBottom();
-                                    }
-                                } catch (e) {
-                                    // 忽略单条解析错误，不中断流式输出
-                                    console.warn('流式数据解析失败', e, trimmedLine);
-                                    continue;
+                            // 跳过空行和非data开头的行
+                            if (!trimmedLine || !trimmedLine.startsWith('data: ')) continue;
+                            // 处理结束标记
+                            if (trimmedLine === 'data: [DONE]') continue;
+                            
+                            // 解析JSON
+                            try {
+                                const jsonData = JSON.parse(trimmedLine.slice(5));
+                                const delta = jsonData.choices?.[0]?.delta?.content;
+                                if (delta) {
+                                    aiMessageContent += delta;
+                                    aiBubbleElement.innerHTML = utils.escapeHtml(aiMessageContent).replace(/\n/g, '<br>');
+                                    utils.scrollToBottom();
                                 }
+                            } catch (e) {
+                                console.warn('流式数据解析失败，跳过该行', e, trimmedLine);
+                                continue;
                             }
                         }
                     }
@@ -1227,29 +1249,32 @@
                         finalAiMessage.content = aiMessageContent;
                     }
 
+                    // 处理buffer里剩余的内容（防止最后一行没解析）
+                    if (buffer.trim()) {
+                        console.warn('流式响应剩余未解析内容', buffer);
+                    }
+
                 } catch (error) {
                     console.error('发送消息失败', error);
-                    // 弹出详细错误，方便用户排查
-                    alert(`请求失败\n\n${error.message || '未知错误，请检查网络和配置'}`);
-
+                    const errorFullMessage = error.message || '未知错误';
+                    utils.showToast('请求失败，查看详细错误信息');
+                    
                     // 处理错误状态
                     if (aiBubbleElement) {
-                        aiBubbleElement.innerHTML = `❌ 请求失败，请查看错误提示`;
+                        aiBubbleElement.innerHTML = `❌ 请求失败\n${errorFullMessage}`;
                     } else {
                         // 如果还没渲染气泡，添加错误消息
                         const errorMessage = {
                             id: aiMessageId,
                             role: 'assistant',
-                            content: `❌ 请求失败，请查看错误提示`
+                            content: `❌ 请求失败\n${errorFullMessage}`
                         };
                         messageList.push(errorMessage);
                         this.renderMessage(errorMessage);
                     }
 
                 } finally {
-                    // 恢复状态
                     isGenerating = false;
-                    elements.messageInput.disabled = false;
                     elements.sendButton.disabled = elements.messageInput.value.trim() === '';
                 }
             },
@@ -1257,6 +1282,7 @@
             clearChat() {
                 messageList = [];
                 this.renderEmptyState();
+                utils.showToast('聊天记录已清空');
             }
         };
 
@@ -1338,26 +1364,6 @@
                 }
             });
 
-            // 配置按钮事件
             elements.settingsSaveButton.addEventListener('click', () => {
                 const success = aiConfigManager.saveConfig();
                 if (success) {
-                    closeSettings();
-                }
-            });
-            elements.settingsResetButton.addEventListener('click', aiConfigManager.resetConfig);
-            elements.settingsTestButton.addEventListener('click', () => {
-                aiConfigManager.testConfig();
-            });
-        }
-
-        // 初始化函数
-        function init() {
-            // 加载配置
-            aiConfigManager.loadConfig();
-            // 初始化认证状态
-            faceIdAuth.initAuthState();
-            // 初始化事件监听
-            initEventListeners();
-            // 渲染空状态
-            chatManager.renderEmptyState();
