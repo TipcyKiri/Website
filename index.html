@@ -51,11 +51,12 @@
           --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
           --safe-area-inset-left: env(safe-area-inset-left, 0px);
           --safe-area-inset-right: env(safe-area-inset-right, 0px);
-          /* ==================== 羽化面积一键控制 ==================== */
-          /* 数值说明：数值越小，羽化面积越小，图片清晰区域越大；数值越大，羽化面积越大 */
-          /* 示例：15% = 窄羽化，20% = 默认效果，25% = 宽羽化，30% = 大面积羽化 */
+          /* ==================== 一键控制区 ==================== */
+          /* 羽化范围：数值越小，羽化面积越小，图片清晰区域越大 */
           --mist-feather-range: 5%;
-          /* ========================================================== */
+          /* 图片圆角：自动同步到羽化遮罩，保证圆角完美适配 */
+          --mist-image-radius: 50px;
+          /* ====================================================== */
       }
       #auth-container {
           position: fixed;
@@ -275,7 +276,7 @@
       .content-image {
           width: 92%;
           aspect-ratio: 1;
-          border-radius: 50px;
+          border-radius: var(--mist-image-radius);
           box-shadow: none;
           transform: none;
           background: url('Mist.png') center/cover no-repeat;
@@ -286,7 +287,11 @@
           pointer-events: none;
           user-select: none;
           -webkit-user-drag: none;
-          /* 羽化核心代码，已绑定变量，无需修改 */
+          /* ==================== 修复核心：圆角+羽化完美适配 ==================== */
+          /* 1. 遮罩圆角与元素圆角100%同步，解决圆角无羽化问题 */
+          -webkit-mask-border-radius: var(--mist-image-radius);
+          mask-border-radius: var(--mist-image-radius);
+          /* 2. 优化渐变逻辑，直边+圆角均匀羽化，无死角 */
           -webkit-mask-image: 
               linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
               linear-gradient(to top, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
@@ -299,12 +304,17 @@
               linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
               linear-gradient(to left, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range));
           mask-composite: intersect;
+          /* 3. 遮罩基础属性，保证与元素完全贴合 */
           -webkit-mask-size: 100% 100%;
           mask-size: 100% 100%;
           -webkit-mask-repeat: no-repeat;
           mask-repeat: no-repeat;
           -webkit-mask-position: center;
           mask-position: center;
+          -webkit-mask-origin: content-box;
+          mask-origin: content-box;
+          -webkit-mask-clip: content-box;
+          mask-clip: content-box;
       }
       .content-image::before {
           content: "";
@@ -314,7 +324,7 @@
           right: 0;
           bottom: 0;
           background: none;
-          border-radius: 50px;
+          border-radius: var(--mist-image-radius);
           pointer-events: none;
           z-index: 1;
       }
@@ -326,7 +336,7 @@
           right: -12%;
           bottom: -12%;
           background: none;
-          border-radius: 60px;
+          border-radius: calc(var(--mist-image-radius) + 10px);
           filter: none;
           transform: none;
           z-index: -1;
@@ -553,9 +563,11 @@
           background-color: #666666;
       }
       @media (max-width: 768px) {
+          :root {
+              --mist-image-radius: 40px;
+          }
           .content-image {
               width: 90%;
-              border-radius: 40px;
               max-width: 450px;
               box-shadow: none;
               transform: none;
@@ -583,9 +595,11 @@
           }
       }
       @media (max-width: 430px) {
+          :root {
+              --mist-image-radius: 35px;
+          }
           .content-image {
               width: 92%;
-              border-radius: 35px;
               max-width: 395px;
               box-shadow: none;
               transform: none;
@@ -613,9 +627,11 @@
           }
       }
       @media (max-width: 390px) {
+          :root {
+              --mist-image-radius: 32px;
+          }
           .content-image {
               width: 90%;
-              border-radius: 32px;
               max-width: 351px;
               box-shadow: none;
               transform: none;
@@ -656,13 +672,15 @@
           }
       }
       @media (max-width: 375px) and (max-height: 667px) {
+          :root {
+              --mist-image-radius: 28px;
+          }
           .main-content {
               padding: 15px 20px;
               transform: translate(-50%, calc(-50% + 12px));
           }
           
           .content-image {
-              border-radius: 28px;
               max-width: 300px;
           }
           
@@ -1098,4 +1116,3 @@
       }
   </script>
 </body>
-</html>
