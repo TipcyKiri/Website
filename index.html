@@ -51,6 +51,11 @@
           --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
           --safe-area-inset-left: env(safe-area-inset-left, 0px);
           --safe-area-inset-right: env(safe-area-inset-right, 0px);
+          /* ==================== 羽化面积一键控制 ==================== */
+          /* 数值说明：数值越小，羽化面积越小，图片清晰区域越大；数值越大，羽化面积越大 */
+          /* 示例：15% = 窄羽化，20% = 默认效果，25% = 宽羽化，30% = 大面积羽化 */
+          --mist-feather-range: 20%;
+          /* ========================================================== */
       }
       #auth-container {
           position: fixed;
@@ -180,7 +185,7 @@
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
-          filter: blur(75px) brightness(0.75);
+          filter: blur(5px) brightness(1);
           z-index: 1;
           transform: scale(1.2);
           -webkit-transform: scale(1.2);
@@ -281,6 +286,25 @@
           pointer-events: none;
           user-select: none;
           -webkit-user-drag: none;
+          /* 羽化核心代码，已绑定变量，无需修改 */
+          -webkit-mask-image: 
+              linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
+              linear-gradient(to top, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
+              linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
+              linear-gradient(to left, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range));
+          -webkit-mask-composite: source-in;
+          mask-image: 
+              linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
+              linear-gradient(to top, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
+              linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
+              linear-gradient(to left, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range));
+          mask-composite: intersect;
+          -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+          -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+          -webkit-mask-position: center;
+          mask-position: center;
       }
       .content-image::before {
           content: "";
@@ -1074,3 +1098,4 @@
       }
   </script>
 </body>
+</html>
