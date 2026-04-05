@@ -51,12 +51,8 @@
           --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
           --safe-area-inset-left: env(safe-area-inset-left, 0px);
           --safe-area-inset-right: env(safe-area-inset-right, 0px);
-          /* ==================== 一键控制区 ==================== */
-          /* 羽化范围：数值越小，羽化面积越小，图片清晰区域越大 */
-          --mist-feather-range: 5%;
-          /* 图片圆角：自动同步到羽化遮罩，保证圆角完美适配 */
+          /* 图片圆角一键控制，无羽化效果 */
           --mist-image-radius: 50px;
-          /* ====================================================== */
       }
       #auth-container {
           position: fixed;
@@ -287,34 +283,6 @@
           pointer-events: none;
           user-select: none;
           -webkit-user-drag: none;
-          /* ==================== 修复核心：圆角+羽化完美适配 ==================== */
-          /* 1. 遮罩圆角与元素圆角100%同步，解决圆角无羽化问题 */
-          -webkit-mask-border-radius: var(--mist-image-radius);
-          mask-border-radius: var(--mist-image-radius);
-          /* 2. 优化渐变逻辑，直边+圆角均匀羽化，无死角 */
-          -webkit-mask-image: 
-              linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
-              linear-gradient(to top, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
-              linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
-              linear-gradient(to left, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range));
-          -webkit-mask-composite: source-in;
-          mask-image: 
-              linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
-              linear-gradient(to top, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
-              linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range)),
-              linear-gradient(to left, transparent 0%, rgba(0,0,0,0.1) calc(var(--mist-feather-range) * 0.2), rgba(0,0,0,0.3) calc(var(--mist-feather-range) * 0.4), rgba(0,0,0,0.6) calc(var(--mist-feather-range) * 0.6), rgba(0,0,0,0.8) calc(var(--mist-feather-range) * 0.8), rgba(0,0,0,0.95) calc(var(--mist-feather-range) * 0.9), rgba(0,0,0,1) var(--mist-feather-range));
-          mask-composite: intersect;
-          /* 3. 遮罩基础属性，保证与元素完全贴合 */
-          -webkit-mask-size: 100% 100%;
-          mask-size: 100% 100%;
-          -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-          -webkit-mask-position: center;
-          mask-position: center;
-          -webkit-mask-origin: content-box;
-          mask-origin: content-box;
-          -webkit-mask-clip: content-box;
-          mask-clip: content-box;
       }
       .content-image::before {
           content: "";
@@ -1116,3 +1084,4 @@
       }
   </script>
 </body>
+</html>
