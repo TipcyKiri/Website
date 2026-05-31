@@ -679,6 +679,9 @@
       }
       
       @media (prefers-color-scheme: light) {
+    html, body {
+        background: #FFFFFF;
+    }
     #auth-container {
         background-color: #FFFFFF;
     }
@@ -691,6 +694,7 @@
         border-top-color: transparent;
     }
 }
+
 
       @supports not (top: env(safe-area-inset-top)) {
           :root {
