@@ -678,6 +678,20 @@
           overflow: hidden;
       }
       
+      @media (prefers-color-scheme: light) {
+    #auth-container {
+        background-color: #FFFFFF;
+    }
+    .auth-button {
+        color: #000000;
+        text-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+    .auth-button-loading::after {
+        border: 2px solid #000000;
+        border-top-color: transparent;
+    }
+}
+
       @supports not (top: env(safe-area-inset-top)) {
           :root {
               --safe-area-inset-top: constant(safe-area-inset-top, 0px);
