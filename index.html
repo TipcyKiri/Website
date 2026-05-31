@@ -327,22 +327,24 @@
           justify-content: center;
       }
       .text-edit-trigger {
-          font-family: 'Snell Roundhand', 'Snell Roundhand Black', cursive;
-          font-weight: 700;
-          color: rgba(255, 255, 255, 0.65);
-          font-size: 45px;
-          width: auto;
-          align-self: stretch;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          mix-blend-mode: screen;
-          border-radius: 8px;
-          flex-shrink: 0;
-          padding-left: 10px;
-      }
+    font-family: 'Snell Roundhand', 'Snell Roundhand Black', cursive;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 45px;
+    width: auto;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    mix-blend-mode: screen;
+    border-radius: 8px;
+    flex-shrink: 0;
+    padding-left: 10px;
+    padding-right: 14px;
+    overflow: visible;
+}
       .text-edit-trigger:active {
           transform: scale(0.92);
       }
@@ -548,11 +550,13 @@
           }
           
           .text-edit-trigger {
-              width: auto;
-              font-size: 45px;
-              border-radius: 7px;
-              padding-left: 10px;
-          }
+    width: auto;
+    font-size: 45px;
+    border-radius: 7px;
+    padding-left: 10px;
+    padding-right: 12px;
+    overflow: visible;
+}
           
           .text-line:first-child {
               font-size: 24px;
@@ -580,11 +584,13 @@
           }
           
           .text-edit-trigger {
-              width: auto;
-              font-size: 26px;
-              border-radius: 6px;
-              padding-left: 8px;
-          }
+    width: auto;
+    font-size: 26px;
+    border-radius: 6px;
+    padding-left: 8px;
+    padding-right: 10px;
+    overflow: visible;
+}
           
           .text-line:first-child {
               font-size: 22px;
@@ -612,11 +618,11 @@
           }
           
           .text-edit-trigger {
-              width: auto;
-              font-size: 24px;
-              border-radius: 6px;
-              padding-left: 8px;
-          }
+    width: auto;
+    font-size: 24px;
+    border-radius: 6px;
+    padding-left: 8px;
+}
           
           .text-line:first-child {
               font-size: 20px;
@@ -661,10 +667,12 @@
           }
           
           .text-edit-trigger {
-              width: auto;
-              font-size: 22px;
-              padding-left: 6px;
-          }
+    width: auto;
+    font-size: 22px;
+    padding-left: 6px;
+    padding-right: 8px;
+    overflow: visible;
+}
       }
       .no-scroll {
           overflow: hidden;
