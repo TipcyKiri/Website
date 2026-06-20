@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Mist">
-  <meta name="description" content="Mist">
+  <meta name="apple-mobile-web-app-title" content="Ti">
+  <meta name="description" content="Ti">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="apple-touch-icon" href="Mist.png">
-  <link rel="apple-touch-startup-image" href="Mist.png">
-  <title>Mist</title>
+  <link rel="apple-touch-icon" href="Ti.png">
+  <link rel="apple-touch-startup-image" href="Ti.png">
+  <title>Ti</title>
   <style>
       * {
           margin: 0;
@@ -51,8 +51,8 @@
           --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
           --safe-area-inset-left: env(safe-area-inset-left, 0px);
           --safe-area-inset-right: env(safe-area-inset-right, 0px);
-          /* 图片圆角一键控制，无羽化效果 */
-          --mist-image-radius: 50px;
+          /*VGrW҉N.c6ReSHeg */
+          --Ti-image-radius: 50px;
       }
       #auth-container {
           position: fixed;
@@ -178,7 +178,7 @@
           left: 0;
           width: 100%;
           height: 100%;
-          background-image: url('Mist.png');
+          background-image: url('Ti.png');
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
@@ -272,10 +272,10 @@
       .content-image {
           width: 92%;
           aspect-ratio: 1;
-          border-radius: var(--mist-image-radius);
+          border-radius: var(--Ti-image-radius);
           box-shadow: none;
           transform: none;
-          background: url('Mist.png') center/cover no-repeat;
+          background: url('Ti.png') center/cover no-repeat;
           position: relative;
           flex-shrink: 0;
           overflow: hidden;
@@ -292,7 +292,7 @@
           right: 0;
           bottom: 0;
           background: none;
-          border-radius: var(--mist-image-radius);
+          border-radius: var(--Ti-image-radius);
           pointer-events: none;
           z-index: 1;
       }
@@ -304,7 +304,7 @@
           right: -12%;
           bottom: -12%;
           background: none;
-          border-radius: calc(var(--mist-image-radius) + 10px);
+          border-radius: calc(var(--Ti-image-radius) + 10px);
           filter: none;
           transform: none;
           z-index: -1;
@@ -342,6 +342,10 @@
           border-radius: 8px;
           flex-shrink: 0;
           padding-left: 10px;
+          padding-right: 10px;
+          white-space: nowrap;
+          overflow: visible;
+          min-width: max-content;
       }
       .text-edit-trigger:active {
           transform: scale(0.92);
@@ -442,7 +446,7 @@
       .image-preview {
           width: 150px;
           height: 150px;
-          background: #333333 url('Mist.png') center/cover no-repeat;
+          background: #333333 url('Ti.png') center/cover no-repeat;
           border-radius: 15px;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
           overflow: hidden;
@@ -532,7 +536,7 @@
       }
       @media (max-width: 768px) {
           :root {
-              --mist-image-radius: 40px;
+              --Ti-image-radius: 40px;
           }
           .content-image {
               width: 90%;
@@ -552,6 +556,7 @@
               font-size: 45px;
               border-radius: 7px;
               padding-left: 10px;
+              padding-right: 10px;
           }
           
           .text-line:first-child {
@@ -564,7 +569,7 @@
       }
       @media (max-width: 430px) {
           :root {
-              --mist-image-radius: 35px;
+              --Ti-image-radius: 35px;
           }
           .content-image {
               width: 92%;
@@ -584,6 +589,7 @@
               font-size: 26px;
               border-radius: 6px;
               padding-left: 8px;
+              padding-right: 8px;
           }
           
           .text-line:first-child {
@@ -596,7 +602,7 @@
       }
       @media (max-width: 390px) {
           :root {
-              --mist-image-radius: 32px;
+              --Ti-image-radius: 32px;
           }
           .content-image {
               width: 90%;
@@ -616,6 +622,7 @@
               font-size: 24px;
               border-radius: 6px;
               padding-left: 8px;
+              padding-right: 8px;
           }
           
           .text-line:first-child {
@@ -641,7 +648,7 @@
       }
       @media (max-width: 375px) and (max-height: 667px) {
           :root {
-              --mist-image-radius: 28px;
+              --Ti-image-radius: 28px;
           }
           .main-content {
               padding: 15px 20px;
@@ -664,6 +671,7 @@
               width: auto;
               font-size: 22px;
               padding-left: 6px;
+              padding-right: 6px;
           }
       }
       .no-scroll {
@@ -686,7 +694,7 @@
       <div class="auth-button-container">
           <button class="auth-button" id="authButton">
               <div class="button-text-container">
-                  <div class="button-main-text">Mist</div>
+                  <div class="button-main-text">Ti</div>
               </div>
           </button>
       </div>
@@ -694,13 +702,13 @@
   <div id="content-container">
       <div class="main-content">
           <div class="content-layer">
-              <div class="content-image" role="img" aria-label="Mist Logo"></div>
+              <div class="content-image" role="img" aria-label="Ti Logo"></div>
               <div class="text-control-container">
                   <div class="text-content">
-                      <div class="text-line">Mist</div>
-                      <div class="text-line">Mist</div>
+                      <div class="text-line">Ti</div>
+                      <div class="text-line">Ti</div>
                   </div>
-                  <div class="text-edit-trigger" title="Settings">Mist</div>
+                  <div class="text-edit-trigger" title="Settings">Ti</div>
               </div>
           </div>
       </div>
@@ -720,8 +728,8 @@
           <div class="modal-section">
               <h3 class="section-title">Change Texts</h3>
               <div class="text-input-container">
-                  <input type="text" class="text-input" id="textInput1" placeholder="Mist" maxlength="25">
-                  <input type="text" class="text-input" id="textInput2" placeholder="Mist" maxlength="25">
+                  <input type="text" class="text-input" id="textInput1" placeholder="Ti" maxlength="25">
+                  <input type="text" class="text-input" id="textInput2" placeholder="Ti" maxlength="25">
               </div>
           </div>
           
@@ -745,15 +753,15 @@
   <script>
       const CONFIG = {
           webauthn: {
-              rpName: "Mist",
-              userName: "Mist",
-              userDisplayName: "'Mist'",
+              rpName: "Ti",
+              userName: "Ti",
+              userDisplayName: "'Ti'",
               timeout: 60000
           },
           
           defaultTexts: {
-              line1: "Mist",
-              line2: "Mist"
+              line1: "Ti",
+              line2: "Ti"
           }
       };
       
@@ -807,7 +815,7 @@
               if (AppState.customImage) {
                   DOM.imagePreview.style.backgroundImage = `url(${AppState.customImage})`;
               } else {
-                  DOM.imagePreview.style.backgroundImage = "url('Mist.png')";
+                  DOM.imagePreview.style.backgroundImage = "url('Ti.png')";
               }
               
               DOM.textInput1.value = AppState.customTexts.line1 || '';
@@ -873,7 +881,7 @@
                       customImage: AppState.customImage,
                       customTexts: AppState.customTexts
                   };
-                  localStorage.setItem('Mist_content', JSON.stringify(content));
+                  localStorage.setItem('Ti_content', JSON.stringify(content));
               } catch (e) {
                   console.error("OX[Q[1Y%:", e);
               }
@@ -881,7 +889,7 @@
           
           loadSavedContent: function() {
               try {
-                  const savedContent = localStorage.getItem('Mist_content');
+                  const savedContent = localStorage.getItem('Ti_content');
                   if (savedContent) {
                       const content = JSON.parse(savedContent);
                       if (content.customImage) {
@@ -1084,3 +1092,4 @@
       }
   </script>
 </body>
+</html>
